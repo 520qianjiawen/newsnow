@@ -6,11 +6,11 @@
   "commit-id": "",
   "packageManager": "pnpm@9.12.1",
   "author": {
-    "url": "https://github.com/",
+    "url": "https://news.525.hk/",
     "email": "",
     "name": "newsnow"
   },
-  "homepage": "https://github.com/",
+  "homepage": "https://news.525.hk/",
   "scripts": {
     "dev": "vite dev",
     "build": "vite build",
