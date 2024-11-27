@@ -2,10 +2,9 @@ import { Buffer } from "node:buffer"
 import * as cheerio from "cheerio"
 import iconv from "iconv-lite"
 import type { NewsItem } from "@shared/types"
-import { $fetch } from "ofetch"
 
 export default defineSource(async () => {
-  const response: ArrayBuffer = await $fetch("https://www.kzaobao.com/top.html", {
+  const response: ArrayBuffer = await myFetch("https://www.kzaobao.com/top.html", {
     responseType: "arrayBuffer",
   })
   const base = "https://www.kzaobao.com"
@@ -24,11 +23,9 @@ export default defineSource(async () => {
         url: base + url,
         title,
         id: url,
-        extra: {
-          date: tranformToUTC(date),
-        },
+        pubDate: parseRelativeDate(date, "Asia/Shanghai").valueOf(),
       })
     }
   })
-  return news.sort((m, n) => n.extra!.date > m.extra!.date ? 1 : -1)
+  return news.sort((m, n) => n.pubDate! > m.pubDate! ? 1 : -1)
 })

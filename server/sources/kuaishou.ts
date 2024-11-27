@@ -26,7 +26,7 @@ interface HotRankData {
 
 export default defineSource(async () => {
   // 获取快手首页HTML
-  const html = await $fetch("https://www.kuaishou.com/?isHome=1")
+  const html = await myFetch("https://www.kuaishou.com/?isHome=1")
   // 提取window.__APOLLO_STATE__中的数据
   const matches = (html as string).match(/window\.__APOLLO_STATE__\s*=\s*(\{.+?\});/)
   if (!matches) {
@@ -42,7 +42,7 @@ export default defineSource(async () => {
   // 获取热榜列表数据
   const hotRankData = data.defaultClient[hotRankId] as HotRankData
   // 转换数据格式
-  return hotRankData.items.map((item) => {
+  return hotRankData.items.filter(k => data.defaultClient[k.id].tagType !== "置顶").map((item) => {
     // 从id中提取实际的热搜词
     const hotSearchWord = item.id.replace("VisionHotRankItem:", "")
 
@@ -53,11 +53,9 @@ export default defineSource(async () => {
       id: hotSearchWord,
       title: hotItem.name,
       url: `https://www.kuaishou.com/search/video?searchKey=${encodeURIComponent(hotItem.name)}`,
-      extra: hotItem.iconUrl
-        ? {
-            icon: `/api/proxy?img=${encodeURIComponent(hotItem.iconUrl)}`,
-          }
-        : {},
+      extra: {
+        icon: hotItem.iconUrl && proxyPicture(hotItem.iconUrl),
+      },
     }
   })
 })

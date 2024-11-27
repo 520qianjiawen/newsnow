@@ -3,9 +3,9 @@ import type { NewsItem } from "@shared/types"
 
 export default defineSource(async () => {
   const baseURL = "https://www.producthunt.com/"
-  const html: any = await $fetch(baseURL)
+  const html: any = await myFetch(baseURL)
   const $ = cheerio.load(html)
-  const $main = $("[data-test^=post-item]")
+  const $main = $("[data-test=homepage-section-0] [data-test^=post-item]")
   const news: NewsItem[] = []
   $main.each((_, el) => {
     const a = $(el).find("a").first()

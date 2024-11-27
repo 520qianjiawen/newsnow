@@ -22,15 +22,14 @@ interface Res {
 export default defineSource({
   zhihu: async () => {
     const url = "https://www.zhihu.com/api/v3/feed/topstory/hot-lists/total?limit=20&desktop=true"
-    const res: Res = await $fetch(url)
+    const res: Res = await myFetch(url)
     return res.data
-      .slice(0, 30)
       .map((k) => {
         return {
           id: k.target.id,
           title: k.target.title,
           extra: {
-            icon: k.card_label?.night_icon && `/api/proxy?img=${encodeURIComponent(k.card_label?.night_icon)}`,
+            icon: k.card_label?.night_icon && proxyPicture(k.card_label.night_icon),
           },
           url: `https://www.zhihu.com/question/${k.target.id}`,
         }

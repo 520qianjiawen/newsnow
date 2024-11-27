@@ -36,14 +36,14 @@ interface WapRes {
 
 const hotSearch = defineSource(async () => {
   const url = "https://s.search.bilibili.com/main/hotword?limit=30"
-  const res: WapRes = await $fetch(url)
+  const res: WapRes = await myFetch(url)
 
   return res.list.map(k => ({
     id: k.keyword,
     title: k.show_name,
     url: `https://search.bilibili.com/all?keyword=${encodeURIComponent(k.keyword)}`,
     extra: {
-      icon: k.icon && `/api/proxy?img=${encodeURIComponent(k.icon)}`,
+      icon: k.icon && proxyPicture(k.icon),
     },
   }))
 })

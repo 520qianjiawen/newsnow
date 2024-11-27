@@ -2,22 +2,22 @@ import type { AllSourceID } from "@shared/types"
 import defu from "defu"
 import type { RSSHubOption, RSSHubInfo as RSSHubResponse, SourceGetter, SourceOption } from "#/types"
 
-type X = SourceGetter | Partial<Record<AllSourceID, SourceGetter>>
-export function defineSource<T extends X>(source: T): T {
+type R = Partial<Record<AllSourceID, SourceGetter>>
+export function defineSource(source: SourceGetter): SourceGetter
+export function defineSource(source: R): R
+export function defineSource(source: SourceGetter | R): SourceGetter | R {
   return source
 }
 
 export function defineRSSSource(url: string, option?: SourceOption): SourceGetter {
   return async () => {
     const data = await rss2json(url)
-    if (!data?.items.length) throw new Error("Cannot fetch data")
+    if (!data?.items.length) throw new Error("Cannot fetch rss data")
     return data.items.map(item => ({
       title: item.title,
       url: item.link,
       id: item.link,
-      extra: {
-        date: !option?.hiddenDate && item.created,
-      },
+      pubDate: !option?.hiddenDate ? item.created : undefined,
     }))
   }
 }
@@ -35,14 +35,12 @@ export function defineRSSHubSource(route: string, RSSHubOptions?: RSSHubOption, 
     Object.entries(RSSHubOptions).forEach(([key, value]) => {
       url.searchParams.set(key, value.toString())
     })
-    const data: RSSHubResponse = await $fetch(url)
+    const data: RSSHubResponse = await myFetch(url)
     return data.items.map(item => ({
       title: item.title,
       url: item.url,
       id: item.id ?? item.url,
-      extra: {
-        date: !sourceOption?.hiddenDate && item.date_published,
-      },
+      pubDate: !sourceOption?.hiddenDate ? item.date_published : undefined,
     }))
   }
 }
