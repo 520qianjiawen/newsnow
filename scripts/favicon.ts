@@ -3,8 +3,9 @@ import fs from "node:fs"
 import { fileURLToPath } from "node:url"
 import { join } from "node:path"
 import { Buffer } from "node:buffer"
+import { getLogos } from "favicons-scraper"
 import { consola } from "consola"
-import { originSources } from "../shared/pre-sources"
+import { originSources } from "../shared/sources"
 
 const projectDir = fileURLToPath(new URL("..", import.meta.url))
 const iconsDir = join(projectDir, "public", "icons")
@@ -29,11 +30,14 @@ async function main() {
       try {
         const icon = join(iconsDir, `${id}.png`)
         if (fs.existsSync(icon)) {
-          // consola.info(`${id}: icon exists. skip.`)
+          consola.info(`${id}: icon exists. skip.`)
           return
         }
         if (!source.home) return
-        await downloadImage(`https://icons.duckduckgo.com/ip3/${source.home.replace(/^https?:\/\//, "").replace(/\/$/, "")}.ico`, icon, id)
+        const res = await getLogos(source.home)
+        if (res.length) {
+          await downloadImage(res[0].src, icon, id)
+        }
       } catch (e) {
         consola.error(id, "\n", e)
       }

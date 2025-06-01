@@ -1,3 +1,7 @@
+import { useAtom } from "jotai"
+import { atomWithStorage } from "jotai/utils"
+import { useCallback } from "react"
+
 const userAtom = atomWithStorage<{
   name?: string
   avatar?: string
@@ -5,43 +9,17 @@ const userAtom = atomWithStorage<{
 
 const jwtAtom = atomWithStorage("jwt", "")
 
-const enableLoginAtom = atomWithStorage<{
-  enable: boolean
-  url?: string
-}>("login", {
-  enable: true,
-})
-
-enableLoginAtom.onMount = (set) => {
-  myFetch("/enable-login").then((r) => {
-    set(r)
-  }).catch((e) => {
-    if (e.statusCode === 506) {
-      set({ enable: false })
-      localStorage.removeItem("jwt")
-    }
-  })
-}
-
 export function useLogin() {
-  const userInfo = useAtomValue(userAtom)
-  const jwt = useAtomValue(jwtAtom)
-  const enableLogin = useAtomValue(enableLoginAtom)
-
+  const [userInfo] = useAtom(userAtom)
+  const [jwt, setJwt] = useAtom(jwtAtom)
   const login = useCallback(() => {
-    window.location.href = enableLogin.url || "/api/login"
-  }, [enableLogin])
-
-  const logout = useCallback(() => {
-    window.localStorage.clear()
-    window.location.reload()
+    window.location.href = __LOGIN_URL__
   }, [])
 
   return {
     loggedIn: !!jwt,
     userInfo,
-    enableLogin: !!enableLogin.enable,
-    logout,
+    logout: () => setJwt(""),
     login,
   }
 }

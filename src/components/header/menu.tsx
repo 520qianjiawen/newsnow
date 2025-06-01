@@ -1,32 +1,43 @@
+import { Homepage } from "@shared/consts"
+import clsx from "clsx"
 import { motion } from "framer-motion"
+import { useEffect, useRef, useState } from "react"
+import { useHoverDirty } from "react-use"
+import { useDark } from "~/hooks/useDark"
+import { useLogin } from "~/hooks/useLogin"
 
 function ThemeToggle() {
   const { isDark, toggleDark } = useDark()
   return (
-    <li onClick={toggleDark} className="cursor-pointer [&_*]:cursor-pointer transition-all">
-      <span className={$("inline-block", isDark ? "i-ph-moon-stars-duotone" : "i-ph-sun-dim-duotone")} />
+    <li onClick={toggleDark}>
+      <span className={clsx("inline-block", isDark ? "i-ph-moon-stars-duotone" : "i-ph-sun-dim-duotone")} />
       <span>
-        {isDark ? "浅色模式" : "深色模式"}
+        {isDark ? "黑暗模式" : "白天模式"}
       </span>
     </li>
   )
 }
 
 export function Menu() {
-  const { loggedIn, login, logout, userInfo, enableLogin } = useLogin()
+  const { loggedIn, login, logout, userInfo } = useLogin()
   const [shown, show] = useState(false)
+  const ref = useRef<HTMLElement>(null)
+  const isHover = useHoverDirty(ref)
+  useEffect(() => {
+    show(isHover)
+  }, [shown, isHover])
   return (
-    <span className="relative" onMouseEnter={() => show(true)} onMouseLeave={() => show(false)}>
+    <span ref={ref} className="relative">
       <span className="flex items-center scale-90">
         {
-          enableLogin && loggedIn && userInfo.avatar
+          loggedIn && userInfo.avatar
             ? (
                 <button
                   type="button"
                   className="h-6 w-6 rounded-full bg-cover"
                   style={
                     {
-                      backgroundImage: `url(${userInfo.avatar}&s=24)`,
+                      backgroundImage: `url(${userInfo.avatar})`,
                     }
                   }
                 >
@@ -36,10 +47,10 @@ export function Menu() {
         }
       </span>
       {shown && (
-        <div className="absolute right-0 z-99 bg-transparent pt-4 top-4">
+        <div className="absolute right-0 z-99 bg-transparent pt-8 top-0">
           <motion.div
             id="dropdown-menu"
-            className={$([
+            className={clsx([
               "w-200px",
               "bg-primary backdrop-blur-5 bg-op-70! rounded-lg shadow-xl",
             ])}
@@ -51,7 +62,7 @@ export function Menu() {
             }}
           >
             <ol className="bg-base bg-op-70! backdrop-blur-md p-2 rounded-lg color-base text-base">
-              {enableLogin && (loggedIn
+              {loggedIn
                 ? (
                     <li onClick={logout}>
                       <span className="i-ph:sign-out-duotone inline-block" />
@@ -63,9 +74,9 @@ export function Menu() {
                       <span className="i-ph:sign-in-duotone inline-block" />
                       <span>Github 账号登录</span>
                     </li>
-                  ))}
+                  )}
               <ThemeToggle />
-              <li onClick={() => window.open(Homepage)} className="cursor-pointer [&_*]:cursor-pointer transition-all">
+              <li onClick={() => window.open(Homepage)}>
                 <span className="i-ph:github-logo-duotone inline-block" />
                 <span>Star on Github </span>
               </li>
@@ -74,7 +85,7 @@ export function Menu() {
                   href="https://github.com/"
                 >
                   <img
-                    alt="GitHub stars badge"
+                    alt="GitHub forks badge"
                     src="https://img.shields.io/github/stars/ourongxing/newsnow?logo=github"
                   />
                 </a>

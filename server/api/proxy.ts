@@ -1,7 +1,7 @@
 export default defineEventHandler(async (event) => {
-  const { url: img, type = "encodeURIComponent" } = getQuery(event)
+  const img = getQuery(event).img
   if (img) {
-    const url = type === "encodeURIComponent" ? decodeURIComponent(img as string) : decodeBase64URL(img as string)
+    const url = decodeURIComponent(img as string)
     return sendProxy(event, url, {
       headers: {
         "Access-Control-Allow-Origin": "*",

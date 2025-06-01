@@ -1,5 +1,4 @@
 import type { MaybePromise } from "@shared/type.util"
-import { $fetch } from "ofetch"
 
 export function safeParseString(str: any) {
   try {
@@ -35,22 +34,4 @@ export class Timer {
   clear() {
     clearTimeout(this.timerId)
   }
-}
-
-export const myFetch = $fetch.create({
-  timeout: 15000,
-  retry: 0,
-  baseURL: "/api",
-})
-
-export function isiOS() {
-  return [
-    "iPad Simulator",
-    "iPhone Simulator",
-    "iPod Simulator",
-    "iPad",
-    "iPhone",
-    "iPod",
-  ].includes(navigator.platform)
-  || (navigator.userAgent.includes("Mac") && "ontouchend" in document)
 }

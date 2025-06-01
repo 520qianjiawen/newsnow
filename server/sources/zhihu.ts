@@ -1,53 +1,38 @@
 interface Res {
   data: {
-    type: "hot_list_feed"
-    style_type: "1"
-    feed_specific: {
-      answer_count: 411
+    card_label?: {
+      icon: string
+      night_icon: string
     }
     target: {
-      title_area: {
-        text: string
-      }
-      excerpt_area: {
-        text: string
-      }
-      image_area: {
-        url: string
-      }
-      metrics_area: {
-        text: string
-        font_color: string
-        background: string
-        weight: string
-      }
-      label_area: {
-        type: "trend"
-        trend: number
-        night_color: string
-        normal_color: string
-      }
-      link: {
-        url: string
-      }
+      id: number
+      title: string
+      url: string
+      created: number
+      answer_count: number
+      follower_count: number
+      bound_topic_ids: number[]
+      comment_count: number
+      is_following: boolean
+      excerpt: string
     }
   }[]
 }
 
 export default defineSource({
   zhihu: async () => {
-    const url = "https://www.zhihu.com/api/v3/feed/topstory/hot-list-web?limit=20&desktop=true"
-    const res: Res = await myFetch(url)
+    const url = "https://www.zhihu.com/api/v3/feed/topstory/hot-lists/total?limit=20&desktop=true"
+    const res: Res = await $fetch(url)
     return res.data
+      .slice(0, 30)
       .map((k) => {
         return {
-          id: k.target.link.url.match(/(\d+)$/)?.[1] ?? k.target.link.url,
-          title: k.target.title_area.text,
+          id: k.target.id,
+          title: k.target.title,
           extra: {
-            info: k.target.metrics_area.text,
-            hover: k.target.excerpt_area.text,
+            icon: k.card_label?.night_icon && `/api/proxy?img=${encodeURIComponent(k.card_label?.night_icon)}`,
           },
-          url: k.target.link.url,
+          url: `https://www.zhihu.com/question/${k.target.id}`,
         }
       })
   },

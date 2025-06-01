@@ -1,25 +1,15 @@
 import { useBeforeUnload, useMount } from "react-use"
 
-const KEY = "unload-time"
-export function isPageReload() {
-  const _ = localStorage.getItem(KEY)
-  if (!_) return false
-  const unloadTime = Number(_)
-  if (!Number.isNaN(unloadTime) && Date.now() - unloadTime < 1000) {
-    return true
-  }
-  localStorage.removeItem(KEY)
-  return false
-}
-
 export function useOnReload(fn?: () => Promise<void> | void, fallback?: () => Promise<void> | void) {
   useBeforeUnload(() => {
-    localStorage.setItem(KEY, Date.now().toString())
+    localStorage.setItem("quitTime", Date.now().toString())
     return false
   })
 
   useMount(() => {
-    if (isPageReload()) {
+    const _ = localStorage.getItem("quitTime")
+    const quitTime = _ ? Number(_) : 0
+    if (!Number.isNaN(quitTime) && Date.now() - quitTime < 1000) {
       fn?.()
     } else {
       fallback?.()

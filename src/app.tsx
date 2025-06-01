@@ -10,6 +10,8 @@ const router = createRouter({
   context: {
     queryClient,
   },
+  defaultPreload: "intent",
+  defaultPreloadStaleTime: 0,
 })
 
 const rootElement = document.getElementById("app")!

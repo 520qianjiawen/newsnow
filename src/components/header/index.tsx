@@ -1,9 +1,13 @@
 import { Link } from "@tanstack/react-router"
+import { useCallback } from "react"
+import { useAtomValue, useSetAtom } from "jotai"
 import { useIsFetching } from "@tanstack/react-query"
+import clsx from "clsx"
 import type { SourceID } from "@shared/types"
+import { Homepage, Version } from "@shared/consts"
 import { NavBar } from "../navbar"
 import { Menu } from "./menu"
-import { currentSourcesAtom, goToTopAtom } from "~/atoms"
+import { currentSourcesAtom, goToTopAtom, refetchSourcesAtom } from "~/atoms"
 
 function GoTop() {
   const { ok, fn: goToTop } = useAtomValue(goToTopAtom)
@@ -11,7 +15,7 @@ function GoTop() {
     <button
       type="button"
       title="Go To Top"
-      className={$("i-ph:arrow-fat-up-duotone", ok ? "op-50 btn" : "op-0")}
+      className={clsx("i-ph:arrow-fat-up-duotone", ok ? "op-50 btn" : "op-0")}
       onClick={goToTop}
     />
   )
@@ -19,13 +23,18 @@ function GoTop() {
 
 function Refresh() {
   const currentSources = useAtomValue(currentSourcesAtom)
-  const { refresh } = useRefetch()
-  const refreshAll = useCallback(() => refresh(...currentSources), [refresh, currentSources])
+  const setRefetchSource = useSetAtom(refetchSourcesAtom)
+  const refreshAll = useCallback(() => {
+    const obj = Object.fromEntries(currentSources.map(id => [id, Date.now()]))
+    setRefetchSource(prev => ({
+      ...prev,
+      ...obj,
+    }))
+  }, [currentSources, setRefetchSource])
 
   const isFetching = useIsFetching({
     predicate: (query) => {
-      const [type, id] = query.queryKey as ["source" | "entire", SourceID]
-      return (type === "source" && currentSources.includes(id)) || type === "entire"
+      return currentSources.includes(query.queryKey[0] as SourceID)
     },
   })
 
@@ -33,7 +42,7 @@ function Refresh() {
     <button
       type="button"
       title="Refresh"
-      className={$("i-ph:arrow-counter-clockwise-duotone btn", isFetching && "animate-spin i-ph:circle-dashed-duotone")}
+      className={clsx("i-ph:arrow-counter-clockwise-duotone btn", isFetching && "animate-spin i-ph:circle-dashed-duotone")}
       onClick={refreshAll}
     />
   )

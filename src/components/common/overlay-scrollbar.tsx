@@ -1,10 +1,11 @@
+import type { UseOverlayScrollbarsParams } from "overlayscrollbars-react"
+import { useOverlayScrollbars } from "overlayscrollbars-react"
 import type { HTMLProps, PropsWithChildren } from "react"
+import { useCallback, useMemo, useRef } from "react"
 import { defu } from "defu"
+import { useSetAtom } from "jotai"
 import { useMount } from "react-use"
-import { useOverlayScrollbars } from "./useOverlayScrollbars"
-import type { UseOverlayScrollbarsParams } from "./useOverlayScrollbars"
 import { goToTopAtom } from "~/atoms"
-import "./style.css"
 
 type Props = HTMLProps<HTMLDivElement> & UseOverlayScrollbarsParams
 const defaultScrollbarParams: UseOverlayScrollbarsParams = {
@@ -16,7 +17,7 @@ const defaultScrollbarParams: UseOverlayScrollbarsParams = {
   defer: true,
 }
 
-export function OverlayScrollbar({ disabled, children, options, events, defer, className, ...props }: PropsWithChildren<Props>) {
+export function OverlayScrollbar({ disabled, children, options, events, defer, ...props }: PropsWithChildren<Props>) {
   const ref = useRef<HTMLDivElement>(null)
   const scrollbarParams = useMemo(() => defu<UseOverlayScrollbarsParams, Array<UseOverlayScrollbarsParams> >({
     options,
@@ -24,7 +25,7 @@ export function OverlayScrollbar({ disabled, children, options, events, defer, c
     defer,
   }, defaultScrollbarParams), [options, events, defer])
 
-  const [initialize, instance] = useOverlayScrollbars(scrollbarParams)
+  const [initialize] = useOverlayScrollbars(scrollbarParams)
 
   useMount(() => {
     if (!disabled) {
@@ -38,28 +39,18 @@ export function OverlayScrollbar({ disabled, children, options, events, defer, c
     }
   })
 
-  useEffect(() => {
-    if (ref.current) {
-      if (instance && instance?.state().destroyed) {
-        ref.current.classList.remove("scrollbar-hidden")
-      } else {
-        ref.current.classList.add("scrollbar-hidden")
-      }
-    }
-  }, [instance])
-
   return (
-    <div ref={ref} {...props} className={$("overflow-auto scrollbar-hidden", className)}>
+    <div ref={ref} {...props}>
       {/* 只能有一个 element */}
       <div>{children}</div>
     </div>
   )
 }
 
-export function GlobalOverlayScrollbar({ children, className, ...props }: PropsWithChildren<HTMLProps<HTMLDivElement>>) {
+export function GlobalOverlayScrollbar({ children, ...props }: PropsWithChildren<HTMLProps<HTMLDivElement>>) {
   const ref = useRef<HTMLDivElement>(null)
   const lastTrigger = useRef(0)
-  const timer = useRef<any>(null)
+  const timer = useRef<any>()
   const setGoToTop = useSetAtom(goToTopAtom)
   const onScroll = useCallback((e: Event) => {
     const now = Date.now()
@@ -71,7 +62,6 @@ export function GlobalOverlayScrollbar({ children, className, ...props }: PropsW
           const el = e.target as HTMLElement
           setGoToTop({
             ok: el.scrollTop > 100,
-            el,
             fn: () => el.scrollTo({ top: 0, behavior: "smooth" }),
           })
         },
@@ -79,7 +69,7 @@ export function GlobalOverlayScrollbar({ children, className, ...props }: PropsW
       )
     }
   }, [setGoToTop])
-  const [initialize, instance] = useOverlayScrollbars({
+  const [initialize] = useOverlayScrollbars({
     options: {
       scrollbars: {
         autoHide: "scroll",
@@ -88,7 +78,7 @@ export function GlobalOverlayScrollbar({ children, className, ...props }: PropsW
     events: {
       scroll: (_, e) => onScroll(e),
     },
-    defer: true,
+    defer: false,
   })
 
   useMount(() => {
@@ -107,18 +97,8 @@ export function GlobalOverlayScrollbar({ children, className, ...props }: PropsW
     }
   })
 
-  useEffect(() => {
-    if (ref.current) {
-      if (instance && instance?.state().destroyed) {
-        ref.current.classList.remove("scrollbar-hidden")
-      } else {
-        ref.current?.classList.add("scrollbar-hidden")
-      }
-    }
-  }, [instance])
-
   return (
-    <div ref={ref} {...props} className={$("overflow-auto scrollbar-hidden", className)}>
+    <div ref={ref} {...props}>
       <div>{children}</div>
     </div>
   )

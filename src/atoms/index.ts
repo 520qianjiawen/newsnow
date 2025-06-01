@@ -1,5 +1,10 @@
-import type { FixedColumnID, SourceID } from "@shared/types"
-import type { Update } from "./types"
+import { atom } from "jotai"
+import type { ColumnID, SourceID } from "@shared/types"
+import { sources } from "@shared/sources"
+import { primitiveMetadataAtom } from "./primitiveMetadataAtom"
+import type { ToastItem, Update } from "./types"
+
+export { primitiveMetadataAtom, preprocessMetadata } from "./primitiveMetadataAtom"
 
 export const focusSourcesAtom = atom((get) => {
   return get(primitiveMetadataAtom).data.focus
@@ -15,7 +20,22 @@ export const focusSourcesAtom = atom((get) => {
   })
 })
 
-export const currentColumnIDAtom = atom<FixedColumnID>("focus")
+function initRefetchSources() {
+  let time = 0
+  // useOnReload
+  // 没有放在 useOnReload 里面, 可以避免初始化后再修改 refetchSourceAtom，导致多次请求 API
+  const _ = localStorage.getItem("quitTime")
+  const now = Date.now()
+  const quitTime = _ ? Number(_) : 0
+  if (!Number.isNaN(quitTime) && now - quitTime < 1000) {
+    time = now
+  }
+  return Object.fromEntries(Object.keys(sources).map(k => [k, time])) as Record<SourceID, number>
+}
+
+export const refetchSourcesAtom = atom(initRefetchSources())
+
+export const currentColumnIDAtom = atom<ColumnID>("focus")
 
 export const currentSourcesAtom = atom((get) => {
   const id = get(currentColumnIDAtom)
@@ -34,6 +54,7 @@ export const currentSourcesAtom = atom((get) => {
 
 export const goToTopAtom = atom({
   ok: false,
-  el: undefined as HTMLElement | undefined,
   fn: undefined as (() => void) | undefined,
 })
+
+export const toastAtom = atom<ToastItem[]>([])

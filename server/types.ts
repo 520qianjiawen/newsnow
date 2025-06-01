@@ -17,13 +17,7 @@ export interface RSSItem {
 
 export interface CacheInfo {
   id: SourceID
-  items: NewsItem[]
-  updated: number
-}
-
-export interface CacheRow {
-  id: SourceID
-  data: string
+  data: NewsItem[]
   updated: number
 }
 

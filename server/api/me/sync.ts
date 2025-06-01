@@ -1,4 +1,5 @@
 import process from "node:process"
+import { verifyPrimitiveMetadata } from "@shared/verify"
 import { UserTable } from "#/database/user"
 
 export default defineEventHandler(async (event) => {
