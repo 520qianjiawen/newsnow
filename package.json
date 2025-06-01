@@ -1,7 +1,7 @@
 {
   "name": "newsnow",
   "type": "module",
-  "version": "0.0.30",
+  "version": "0.0.28",
   "private": true,
   "packageManager": "pnpm@10.5.2",
   "author": {
@@ -30,12 +30,11 @@
     "@atlaskit/pragmatic-drag-and-drop-hitbox": "^1.0.3",
     "@formkit/auto-animate": "^0.8.2",
     "@iconify-json/si": "^1.2.3",
-    "@modelcontextprotocol/sdk": "^1.11.0",
     "@tanstack/react-query-devtools": "^5.66.11",
     "@tanstack/react-router": "^1.112.0",
     "@unocss/reset": "^66.0.0",
     "ahooks": "^3.8.4",
-    "better-sqlite3": "^11.10.0",
+    "better-sqlite3": "^11.8.1",
     "cheerio": "^1.0.0",
     "clsx": "^2.1.1",
     "cmdk": "^1.0.4",
@@ -100,7 +99,7 @@
     "vitest": "^3.0.7",
     "workbox-build": "^7.3.0",
     "workbox-window": "^7.3.0",
-    "wrangler": "4.14.1"
+    "wrangler": "^3.111.0"
   },
   "pnpm": {
     "patchedDependencies": {
@@ -110,18 +109,16 @@
       "@napi-rs/pinyin",
       "@parcel/watcher",
       "@swc/core",
-      "esbuild",
       "better-sqlite3",
+      "esbuild",
       "sharp",
       "simple-git-hooks",
-      "unrs-resolver",
       "workerd"
     ]
   },
   "resolutions": {
     "cross-spawn": ">=7.0.6",
     "dayjs": "1.11.13",
-    "nitropack": "npm:nitro-go@0.0.3",
     "picomatch": "^4.0.2",
     "react": "^19",
     "db0": "^0.3.1",
