@@ -20,7 +20,7 @@ html.dark {
 }
 
 body {
-  --at-apply: color-base bg-base sprinkle-primary;
+  --at-apply: color-base bg-base sprinkle-primary text-base;
   -moz-user-select: none;
   -webkit-user-select: none;
   user-select: none;
@@ -50,4 +50,9 @@ button:disabled {
 
 #dropdown-menu li {
   --at-apply: hover:bg-neutral-400/10 rounded-md flex items-center p-1 gap-1;
+}
+
+
+.grabbing * {
+  cursor: grabbing;
 }

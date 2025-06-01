@@ -3,7 +3,7 @@ import type { NewsItem } from "@shared/types"
 
 export default defineSource(async () => {
   const baseURL = "https://www.gelonghui.com"
-  const html: any = await $fetch("https://www.gelonghui.com/news/")
+  const html: any = await myFetch("https://www.gelonghui.com/news/")
   const $ = cheerio.load(html)
   const $main = $(".article-content")
   const news: NewsItem[] = []
@@ -21,7 +21,7 @@ export default defineSource(async () => {
         title,
         id: url,
         extra: {
-          date: parseRelativeDate(relatieveTime, "Asia/Shanghai"),
+          date: parseRelativeDate(relatieveTime, "Asia/Shanghai").valueOf(),
           info,
         },
       })

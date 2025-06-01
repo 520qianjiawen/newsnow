@@ -1,11 +1,10 @@
 import { useMemo } from "react"
 import { useMedia, useUpdateEffect } from "react-use"
-import { atomWithStorage } from "jotai/utils"
-import { useAtom } from "jotai"
 
 export declare type ColorScheme = "dark" | "light" | "auto"
 
-const colorSchemeAtom = atomWithStorage("color-scheme", "auto")
+const colorSchemeAtom = atomWithStorage("color-scheme", "dark")
+
 export function useDark() {
   const [colorScheme, setColorScheme] = useAtom(colorSchemeAtom)
   const prefersDarkMode = useMedia("(prefers-color-scheme: dark)")

@@ -2,7 +2,7 @@ import * as cheerio from "cheerio"
 import type { NewsItem } from "@shared/types"
 
 export default defineSource(async () => {
-  const response: any = await $fetch("https://www.ithome.com/list/")
+  const response: any = await myFetch("https://www.ithome.com/list/")
   const $ = cheerio.load(response)
   const $main = $("#list > div.fl > ul > li")
   const news: NewsItem[] = []
@@ -19,12 +19,10 @@ export default defineSource(async () => {
           url,
           title,
           id: url,
-          extra: {
-            date: tranformToUTC(date),
-          },
+          pubDate: parseRelativeDate(date, "Asia/Shanghai").valueOf(),
         })
       }
     }
   })
-  return news.sort((m, n) => n.extra!.date > m.extra!.date ? 1 : -1)
+  return news.sort((m, n) => n.pubDate! > m.pubDate! ? 1 : -1)
 })

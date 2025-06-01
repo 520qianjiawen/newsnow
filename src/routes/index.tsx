@@ -1,5 +1,4 @@
 import { createFileRoute } from "@tanstack/react-router"
-import { useAtomValue } from "jotai"
 import { focusSourcesAtom } from "~/atoms"
 import { Column } from "~/components/column"
 
@@ -9,5 +8,7 @@ export const Route = createFileRoute("/")({
 
 function IndexComponent() {
   const focusSources = useAtomValue(focusSourcesAtom)
-  return <Column id={focusSources.length ? "focus" : "hottest"} />
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const id = useMemo(() => focusSources.length ? "focus" : "hottest", [])
+  return <Column id={id} />
 }

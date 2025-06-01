@@ -1,6 +1,6 @@
 import type { colors } from "unocss/preset-mini"
-import type { columnIds } from "./metadata"
-import type { originSources } from "./sources"
+import type { columns, fixedColumnIds } from "./metadata"
+import type { originSources } from "./pre-sources"
 
 export type Color = "primary" | Exclude<keyof typeof colors, "current" | "inherit" | "transparent" | "black" | "white">
 
@@ -11,7 +11,7 @@ export type SourceID = {
   [Key in MainSourceID]: ConstSources[Key] extends { disable?: true } ? never :
     ConstSources[Key] extends { sub?: infer SubSource } ? {
     // @ts-expect-error >_<
-      [SubKey in keyof SubSource ]: SubSource[SubKey] extends { disable?: true } ? never : `${Key}-${SubKey}`
+      [SubKey in keyof SubSource]: SubSource[SubKey] extends { disable?: true } ? never : `${Key}-${SubKey}`
     }[keyof SubSource] | Key : Key;
 }[MainSourceID]
 
@@ -24,16 +24,17 @@ export type AllSourceID = {
 
 // export type DisabledSourceID = Exclude<SourceID, MainSourceID>
 
-export type ColumnID = (typeof columnIds)[number]
+export type ColumnID = keyof typeof columns
 export type Metadata = Record<ColumnID, Column>
 
 export interface PrimitiveMetadata {
   updatedTime: number
-  data: Record<ColumnID, SourceID[]>
+  data: Record<FixedColumnID, SourceID[]>
   action: "init" | "manual" | "sync"
 }
 
-type ManualColumnID = Exclude<ColumnID, "focus" | "realtime" | "hottest">
+export type FixedColumnID = (typeof fixedColumnIds)[number]
+export type HiddenColumnID = Exclude<ColumnID, FixedColumnID>
 
 export interface OriginSource extends Partial<Omit<Source, "name" | "redirect">> {
   name: string
@@ -69,12 +70,12 @@ export interface Source {
    * Default normal timeline
    */
   type?: "hottest" | "realtime"
-  column?: ManualColumnID
+  column?: HiddenColumnID
   home?: string
   /**
    * @default false
    */
-  disable?: boolean
+  disable?: boolean | "cf"
   redirect?: SourceID
 }
 
@@ -89,11 +90,21 @@ export interface NewsItem {
   url: string
   mobileUrl?: string
   pubDate?: number | string
-  extra?: Record<string, any>
+  extra?: {
+    hover?: string
+    date?: number | string
+    info?: false | string
+    diff?: number
+    icon?: false | string | {
+      url: string
+      scale: number
+    }
+  }
 }
 
 export interface SourceResponse {
   status: "success" | "cache"
+  id: SourceID
   updatedTime: number | string
   items: NewsItem[]
 }
