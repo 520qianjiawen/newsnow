@@ -355,7 +355,7 @@
   },
   "bilibili-hot-video": {
     "name": "哔哩哔哩",
-    "type": "hottest",
+    "type": "#",
     "disable": "cf",
     "column": "china",
     "home": "https://www.bilibili.com",
@@ -365,7 +365,7 @@
   },
   "bilibili-ranking": {
     "name": "哔哩哔哩",
-    "type": "hottest",
+    "type": "#",
     "disable": "cf",
     "column": "china",
     "home": "https://www.bilibili.com",
@@ -427,7 +427,7 @@
   },
   "linuxdo-hot": {
     "name": "LINUX DO",
-    "type": "hottest",
+    "type": "#",
     "disable": "cf",
     "column": "tech",
     "home": "https://linux.do/hot",
@@ -444,7 +444,7 @@
   },
   "smzdm": {
     "name": "什么值得买",
-    "type": "hottest",
+    "type": "#",
     "column": "china",
     "home": "https://www.smzdm.com",
     "color": "red",
