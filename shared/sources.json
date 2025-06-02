@@ -355,7 +355,7 @@
   },
   "bilibili-hot-video": {
     "name": "哔哩哔哩",
-    "type": "hottest",
+    "type": "#",
     "disable": "cf",
     "column": "china",
     "home": "https://www.bilibili.com",
@@ -365,7 +365,7 @@
   },
   "bilibili-ranking": {
     "name": "哔哩哔哩",
-    "type": "hottest",
+    "type": "#",
     "disable": "cf",
     "column": "china",
     "home": "https://www.bilibili.com",
