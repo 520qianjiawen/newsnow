@@ -21,7 +21,7 @@ interface Res {
 
 export default defineSource({
   zhihu: async () => {
-    const url = "https://www.zhihu.com/api/v3/feed/topstory/hot-lists/total?limit=20&desktop=true"
+    const url = "https://www.zhihu.com/api/v3/feed/topstory/hot-list-web?limit=20&desktop=true"
     const res: Res = await myFetch(url)
     return res.data
       .map((k) => {
