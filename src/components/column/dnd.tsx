@@ -33,19 +33,14 @@ export function Dnd() {
 
   return (
     <DndWrapper items={items} setItems={setItems} isSingleColumn={isMobile}>
-      <OverlayScrollbar defer className="overflow-x-auto">
+      {/* Use vertical scrolling instead of horizontal on mobile. */}
+      <OverlayScrollbar defer className="overflow-y-auto">
         <motion.ol
-          className={isMobile
-            ? "flex px-2 gap-6 pb-4 scroll-smooth"
-            : "grid w-full gap-6"}
+          className="grid w-full gap-6"
           ref={parent}
-          style={isMobile
-            ? {
-                // 横向滚动布局
-              }
-            : {
-                gridTemplateColumns: `repeat(auto-fill, minmax(${minWidth}px, 1fr))`,
-              }}
+          style={{
+            gridTemplateColumns: isMobile ? '1fr' : 'repeat(4, 1fr)',
+          }}
           initial="hidden"
           animate="visible"
           variants={{
@@ -64,8 +59,6 @@ export function Dnd() {
           {items.map((id, index) => (
             <motion.li
               key={id}
-              className={$(isMobile && "flex-shrink-0", isMobile && index === items.length - 1 && "mr-2")}
-              style={isMobile ? { width: `${width - 16 > WIDTH ? WIDTH : width - 16}px` } : undefined}
               transition={{
                 type: "tween",
                 duration: AnimationDuration / 1000,
@@ -88,7 +81,8 @@ export function Dnd() {
       </OverlayScrollbar>
       {isMobile && (
         <div className="flex justify-center">
-          <span className="text-sm text-gray-500 text-center">左右滑动查看更多</span>
+          {/* Update hint message to reflect vertical scrolling on mobile */}
+          <span className="text-sm text-gray-500 text-center">上下滑动查看更多</span>
         </div>
       )}
     </DndWrapper>
@@ -112,7 +106,8 @@ function DndWrapper({ items, setItems, isSingleColumn, children }: PropsWithChil
       startIndex: fromIndex,
       indexOfTarget: toIndex,
       closestEdgeOfTarget,
-      axis: isSingleColumn ? "horizontal" : "vertical",
+      // Use vertical axis for both single and multi column layouts. Cards are stacked vertically on mobile.
+      axis: "vertical",
     })
     setItems(update)
   }, [items, setItems, isSingleColumn])
