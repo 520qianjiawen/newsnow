@@ -62,15 +62,9 @@ export function Dnd() {
           }}
         >
           {(() => {
-            // Build a list of cards interleaved with ads. Each news card is
-            // followed by an advertisement slot. The ad uses the same sizing
-            // rules as the cards to maintain layout consistency. On mobile the
-            // width is calculated dynamically; on larger screens the grid
-            // system handles sizing via CSS. A unique key is provided for
-            // each ad to satisfy React's list rendering.
-            const elements: React.ReactNode[] = []
+            const elements: any[] = []
             items.forEach((id, index) => {
-              // Card wrapper item
+              // Render the news card
               elements.push(
                 <motion.li
                   key={id}
@@ -94,7 +88,7 @@ export function Dnd() {
                   <SortableCardWrapper id={id} />
                 </motion.li>
               )
-              // Advertisement after each card
+              // After each card, insert an advertisement card
               elements.push(
                 <motion.li
                   key={`ad-${index}`}
@@ -115,11 +109,9 @@ export function Dnd() {
                     },
                   }}
                 >
-                  {/* Ad container styled similarly to the news cards */}
                   <div
                     className={$(
                       "flex flex-col h-500px rounded-2xl p-4 items-center justify-center",
-                      // Use the same base background with some transparency as the news cards
                       "bg-base bg-op-70!",
                     )}
                   >
