@@ -46,40 +46,31 @@ function RootComponent() {
           "lg:(px-24)",
         ])}
       >
-        <div className="flex w-full">
-          {/* Left sidebar on large screens. It contains no content so that Google Auto Ads can insert ads automatically. */}
-          <aside className="hidden xl:block flex-shrink-0 w-60 mr-4"></aside>
-          {/* Main content area */}
-          <div className="flex-1">
-            <header
-              className={$([
-                "grid items-center py-4 px-5",
-                "lg:(py-6)",
-                "sticky top-0 z-10 backdrop-blur-md",
-              ])}
-              style={{
-                gridTemplateColumns: "50px auto 50px",
-              }}
-            >
-              <Header />
-            </header>
-            <main
-              className={$([
-                "mt-2",
-                "min-h-[calc(100vh-180px)]",
-                "md:(min-h-[calc(100vh-175px)])",
-                "lg:(min-h-[calc(100vh-194px)])",
-              ])}
-            >
-              <Outlet />
-            </main>
-            <footer className="py-6 flex flex-col items-center justify-center text-sm text-neutral-500 font-mono">
-              <Footer />
-            </footer>
-          </div>
-          {/* Right sidebar on large screens. It contains no content so that Google Auto Ads can insert ads automatically. */}
-          <aside className="hidden xl:block flex-shrink-0 w-60 ml-4"></aside>
-        </div>
+        <header
+          className={$([
+            "grid items-center py-4 px-5",
+            "lg:(py-6)",
+            "sticky top-0 z-10 backdrop-blur-md",
+          ])}
+          style={{
+            gridTemplateColumns: "50px auto 50px",
+          }}
+        >
+          <Header />
+        </header>
+        <main
+          className={$([
+            "mt-2",
+            "min-h-[calc(100vh-180px)]",
+            "md:(min-h-[calc(100vh-175px)])",
+            "lg:(min-h-[calc(100vh-194px)])",
+          ])}
+        >
+          <Outlet />
+        </main>
+        <footer className="py-6 flex flex-col items-center justify-center text-sm text-neutral-500 font-mono">
+          <Footer />
+        </footer>
       </GlobalOverlayScrollbar>
       <Toast />
       <SearchBar />
