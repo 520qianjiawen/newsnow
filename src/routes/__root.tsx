@@ -10,7 +10,7 @@ import { GlobalOverlayScrollbar } from "~/components/common/overlay-scrollbar"
 import { Footer } from "~/components/footer"
 import { Toast } from "~/components/common/toast"
 import { SearchBar } from "~/components/common/search-bar"
-import { AdSense } from "~/components/common/adsense"
+// Note: we previously imported AdSense to insert explicit ad slots. Since we now rely on Google Auto Ads to place ads automatically, the AdSense component is unused and thus removed.
 
 export const Route = createRootRouteWithContext<{
   queryClient: QueryClient
@@ -35,8 +35,8 @@ function RootComponent() {
       {/*
        * Wrap the entire scrollable layout in a flex container to allow
        * persistent sidebars on large screens. On screens narrower than
-       * the xl breakpoint the sidebars are hidden. The ads themselves
-       * are rendered via the AdSense component.
+       * the xl breakpoint the sidebars are hidden. These sidebars are left empty so that
+       * Google Auto Ads can insert advertisements automatically when enabled.
        */}
       <GlobalOverlayScrollbar
         className={$([
@@ -47,10 +47,8 @@ function RootComponent() {
         ])}
       >
         <div className="flex w-full">
-          {/* Left sidebar for advertisements on large screens */}
-          <aside className="hidden xl:block flex-shrink-0 w-60 mr-4">
-            <AdSense slot="left-sidebar" />
-          </aside>
+          {/* Left sidebar on large screens. It contains no content so that Google Auto Ads can insert ads automatically. */}
+          <aside className="hidden xl:block flex-shrink-0 w-60 mr-4"></aside>
           {/* Main content area */}
           <div className="flex-1">
             <header
@@ -65,12 +63,13 @@ function RootComponent() {
             >
               <Header />
             </header>
-            <main className={$([
-              "mt-2",
-              "min-h-[calc(100vh-180px)]",
-              "md:(min-h-[calc(100vh-175px)])",
-              "lg:(min-h-[calc(100vh-194px)])",
-            ])}
+            <main
+              className={$([
+                "mt-2",
+                "min-h-[calc(100vh-180px)]",
+                "md:(min-h-[calc(100vh-175px)])",
+                "lg:(min-h-[calc(100vh-194px)])",
+              ])}
             >
               <Outlet />
             </main>
@@ -78,10 +77,8 @@ function RootComponent() {
               <Footer />
             </footer>
           </div>
-          {/* Right sidebar for advertisements on large screens */}
-          <aside className="hidden xl:block flex-shrink-0 w-60 ml-4">
-            <AdSense slot="right-sidebar" />
-          </aside>
+          {/* Right sidebar on large screens. It contains no content so that Google Auto Ads can insert ads automatically. */}
+          <aside className="hidden xl:block flex-shrink-0 w-60 ml-4"></aside>
         </div>
       </GlobalOverlayScrollbar>
       <Toast />

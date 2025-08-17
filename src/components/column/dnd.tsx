@@ -14,7 +14,7 @@ import { useSortable } from "../common/dnd/useSortable"
 import { OverlayScrollbar } from "../common/overlay-scrollbar"
 import type { ItemsProps } from "./card"
 import { CardWrapper } from "./card"
-import { AdSense } from "~/components/common/adsense"
+// Removed AdSense import as ads are no longer inserted between cards.
 import { currentSourcesAtom } from "~/atoms"
 
 const AnimationDuration = 200
@@ -61,67 +61,29 @@ export function Dnd() {
             },
           }}
         >
-          {(() => {
-            const elements: any[] = []
-            items.forEach((id, index) => {
-              // Render the news card
-              elements.push(
-                <motion.li
-                  key={id}
-                  className={$(isMobile && "flex-shrink-0")}
-                  style={isMobile ? { width: `${width - 16 > WIDTH ? WIDTH : width - 16}px` } : undefined}
-                  transition={{
-                    type: "tween",
-                    duration: AnimationDuration / 1000,
-                  }}
-                  variants={{
-                    hidden: {
-                      y: 20,
-                      opacity: 0,
-                    },
-                    visible: {
-                      y: 0,
-                      opacity: 1,
-                    },
-                  }}
-                >
-                  <SortableCardWrapper id={id} />
-                </motion.li>
-              )
-              // After each card, insert an advertisement card
-              elements.push(
-                <motion.li
-                  key={`ad-${index}`}
-                  className={$(isMobile && "flex-shrink-0")}
-                  style={isMobile ? { width: `${width - 16 > WIDTH ? WIDTH : width - 16}px` } : undefined}
-                  transition={{
-                    type: "tween",
-                    duration: AnimationDuration / 1000,
-                  }}
-                  variants={{
-                    hidden: {
-                      y: 20,
-                      opacity: 0,
-                    },
-                    visible: {
-                      y: 0,
-                      opacity: 1,
-                    },
-                  }}
-                >
-                  <div
-                    className={$(
-                      "flex flex-col h-500px rounded-2xl p-4 items-center justify-center",
-                      "bg-base bg-op-70!",
-                    )}
-                  >
-                    <AdSense slot={`card-${index}`} />
-                  </div>
-                </motion.li>
-              )
-            })
-            return elements
-          })()}
+          {items.map((id, index) => (
+            <motion.li
+              key={id}
+              className={$(isMobile && "flex-shrink-0", isMobile && index === items.length - 1 && "mr-2")}
+              style={isMobile ? { width: `${width - 16 > WIDTH ? WIDTH : width - 16}px` } : undefined}
+              transition={{
+                type: "tween",
+                duration: AnimationDuration / 1000,
+              }}
+              variants={{
+                hidden: {
+                  y: 20,
+                  opacity: 0,
+                },
+                visible: {
+                  y: 0,
+                  opacity: 1,
+                },
+              }}
+            >
+              <SortableCardWrapper id={id} />
+            </motion.li>
+          ))}
         </motion.ol>
       </OverlayScrollbar>
       {isMobile && (
