@@ -10,6 +10,7 @@ import { GlobalOverlayScrollbar } from "~/components/common/overlay-scrollbar"
 import { Footer } from "~/components/footer"
 import { Toast } from "~/components/common/toast"
 import { SearchBar } from "~/components/common/search-bar"
+import { AdSense } from "~/components/common/adsense"
 
 export const Route = createRootRouteWithContext<{
   queryClient: QueryClient
@@ -31,6 +32,12 @@ function RootComponent() {
   usePWA()
   return (
     <>
+      {/*
+       * Wrap the entire scrollable layout in a flex container to allow
+       * persistent sidebars on large screens. On screens narrower than
+       * the xl breakpoint the sidebars are hidden. The ads themselves
+       * are rendered via the AdSense component.
+       */}
       <GlobalOverlayScrollbar
         className={$([
           !isMobile && "px-4",
@@ -39,30 +46,43 @@ function RootComponent() {
           "lg:(px-24)",
         ])}
       >
-        <header
-          className={$([
-            "grid items-center py-4 px-5",
-            "lg:(py-6)",
-            "sticky top-0 z-10 backdrop-blur-md",
-          ])}
-          style={{
-            gridTemplateColumns: "50px auto 50px",
-          }}
-        >
-          <Header />
-        </header>
-        <main className={$([
-          "mt-2",
-          "min-h-[calc(100vh-180px)]",
-          "md:(min-h-[calc(100vh-175px)])",
-          "lg:(min-h-[calc(100vh-194px)])",
-        ])}
-        >
-          <Outlet />
-        </main>
-        <footer className="py-6 flex flex-col items-center justify-center text-sm text-neutral-500 font-mono">
-          <Footer />
-        </footer>
+        <div className="flex w-full">
+          {/* Left sidebar for advertisements on large screens */}
+          <aside className="hidden xl:block flex-shrink-0 w-60 mr-4">
+            <AdSense slot="left-sidebar" />
+          </aside>
+          {/* Main content area */}
+          <div className="flex-1">
+            <header
+              className={$([
+                "grid items-center py-4 px-5",
+                "lg:(py-6)",
+                "sticky top-0 z-10 backdrop-blur-md",
+              ])}
+              style={{
+                gridTemplateColumns: "50px auto 50px",
+              }}
+            >
+              <Header />
+            </header>
+            <main className={$([
+              "mt-2",
+              "min-h-[calc(100vh-180px)]",
+              "md:(min-h-[calc(100vh-175px)])",
+              "lg:(min-h-[calc(100vh-194px)])",
+            ])}
+            >
+              <Outlet />
+            </main>
+            <footer className="py-6 flex flex-col items-center justify-center text-sm text-neutral-500 font-mono">
+              <Footer />
+            </footer>
+          </div>
+          {/* Right sidebar for advertisements on large screens */}
+          <aside className="hidden xl:block flex-shrink-0 w-60 ml-4">
+            <AdSense slot="right-sidebar" />
+          </aside>
+        </div>
       </GlobalOverlayScrollbar>
       <Toast />
       <SearchBar />
