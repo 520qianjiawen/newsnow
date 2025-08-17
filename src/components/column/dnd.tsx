@@ -14,6 +14,7 @@ import { useSortable } from "../common/dnd/useSortable"
 import { OverlayScrollbar } from "../common/overlay-scrollbar"
 import type { ItemsProps } from "./card"
 import { CardWrapper } from "./card"
+import { AdSense } from "~/components/common/adsense"
 import { currentSourcesAtom } from "~/atoms"
 
 const AnimationDuration = 200
@@ -60,29 +61,75 @@ export function Dnd() {
             },
           }}
         >
-          {items.map((id, index) => (
-            <motion.li
-              key={id}
-              className={$(isMobile && "flex-shrink-0", isMobile && index === items.length - 1 && "mr-2")}
-              style={isMobile ? { width: `${width - 16 > WIDTH ? WIDTH : width - 16}px` } : undefined}
-              transition={{
-                type: "tween",
-                duration: AnimationDuration / 1000,
-              }}
-              variants={{
-                hidden: {
-                  y: 20,
-                  opacity: 0,
-                },
-                visible: {
-                  y: 0,
-                  opacity: 1,
-                },
-              }}
-            >
-              <SortableCardWrapper id={id} />
-            </motion.li>
-          ))}
+          {(() => {
+            // Build a list of cards interleaved with ads. Each news card is
+            // followed by an advertisement slot. The ad uses the same sizing
+            // rules as the cards to maintain layout consistency. On mobile the
+            // width is calculated dynamically; on larger screens the grid
+            // system handles sizing via CSS. A unique key is provided for
+            // each ad to satisfy React's list rendering.
+            const elements: React.ReactNode[] = []
+            items.forEach((id, index) => {
+              // Card wrapper item
+              elements.push(
+                <motion.li
+                  key={id}
+                  className={$(isMobile && "flex-shrink-0")}
+                  style={isMobile ? { width: `${width - 16 > WIDTH ? WIDTH : width - 16}px` } : undefined}
+                  transition={{
+                    type: "tween",
+                    duration: AnimationDuration / 1000,
+                  }}
+                  variants={{
+                    hidden: {
+                      y: 20,
+                      opacity: 0,
+                    },
+                    visible: {
+                      y: 0,
+                      opacity: 1,
+                    },
+                  }}
+                >
+                  <SortableCardWrapper id={id} />
+                </motion.li>
+              )
+              // Advertisement after each card
+              elements.push(
+                <motion.li
+                  key={`ad-${index}`}
+                  className={$(isMobile && "flex-shrink-0")}
+                  style={isMobile ? { width: `${width - 16 > WIDTH ? WIDTH : width - 16}px` } : undefined}
+                  transition={{
+                    type: "tween",
+                    duration: AnimationDuration / 1000,
+                  }}
+                  variants={{
+                    hidden: {
+                      y: 20,
+                      opacity: 0,
+                    },
+                    visible: {
+                      y: 0,
+                      opacity: 1,
+                    },
+                  }}
+                >
+                  {/* Ad container styled similarly to the news cards */}
+                  <div
+                    className={$(
+                      "flex flex-col h-500px rounded-2xl p-4 items-center justify-center",
+                      // Use the same base background with some transparency as the news cards
+                      "bg-base bg-op-70!",
+                    )}
+                  >
+                    <AdSense slot={`card-${index}`} />
+                  </div>
+                </motion.li>
+              )
+            })
+            return elements
+          })()}
         </motion.ol>
       </OverlayScrollbar>
       {isMobile && (

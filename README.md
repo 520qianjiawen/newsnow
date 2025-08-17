@@ -126,4 +126,4 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for detailed guidelines on how to contrib
 
 ## License
 
-[MIT](./LICENSE) © ASG
+[MIT](./LICENSE) © ourongxing
