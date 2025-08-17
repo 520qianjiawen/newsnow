@@ -7,7 +7,6 @@ import { createPortal } from "react-dom"
 import { useThrottleFn } from "ahooks"
 import { useAutoAnimate } from "@formkit/auto-animate/react"
 import { motion } from "framer-motion"
-import { useWindowSize } from "react-use"
 import { isMobile } from "react-device-detect"
 import { DndContext } from "../common/dnd"
 import { useSortable } from "../common/dnd/useSortable"
@@ -18,16 +17,10 @@ import { CardWrapper } from "./card"
 import { currentSourcesAtom } from "~/atoms"
 
 const AnimationDuration = 200
-const WIDTH = 350
 export function Dnd() {
   const [items, setItems] = useAtom(currentSourcesAtom)
   const [parent] = useAutoAnimate({ duration: AnimationDuration })
   useEntireQuery(items)
-  const { width } = useWindowSize()
-  const minWidth = useMemo(() => {
-    // double padding = 32
-    return Math.min(width - 32, WIDTH)
-  }, [width])
 
   if (!items.length) return null
 
@@ -39,7 +32,7 @@ export function Dnd() {
           className="grid w-full gap-6"
           ref={parent}
           style={{
-            gridTemplateColumns: isMobile ? '1fr' : 'repeat(4, 1fr)',
+            gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
           }}
           initial="hidden"
           animate="visible"
