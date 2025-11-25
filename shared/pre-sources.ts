@@ -413,6 +413,36 @@ export const originSources = {
       },
     },
   },
+  "douban": {
+    name: "豆瓣",
+    column: "china",
+    title: "热门电影",
+    color: "green",
+    type: "hottest",
+    home: "https://www.douban.com",
+  },
+  "steam": {
+    name: "Steam",
+    column: "world",
+    title: "在线人数",
+    color: "blue",
+    type: "hottest",
+    home: "https://store.steampowered.com",
+  },
+  "tencent": {
+    name: "腾讯新闻",
+    column: "china",
+    color: "blue",
+    home: "https://news.qq.com",
+    sub: {
+      hot: {
+        title: "综合早报",
+        type: "hottest",
+        interval: Time.Common,
+        home: "https://news.qq.com/tag/aEWqxLtdgmQ=",
+      },
+    },
+  },
 } as const satisfies Record<string, OriginSource>
 
 export function genSources() {
@@ -461,10 +491,8 @@ export function genSources() {
     _.filter(([_, v]) => {
       if (v.disable === "cf" && process.env.CF_PAGES) {
         return false
-      } else if (v.disable === true) {
-        return false
       } else {
-        return true
+        return v.disable !== true
       }
     }),
   )
