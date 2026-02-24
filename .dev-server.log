@@ -1,0 +1,11 @@
+
+> newsnow@0.0.38 dev /Users/cavon/Downloads/newsnow
+> npm run presource && vite dev
+
+
+> newsnow@0.0.38 presource
+> tsx ./scripts/favicon.ts && tsx ./scripts/source.ts
+
+sh: tsx: command not found
+ ELIFECYCLE  Command failed.
+ WARN   Local package.json exists, but node_modules missing, did you mean to install?
