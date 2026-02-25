@@ -1,8 +1,7 @@
 import { Buffer } from "node:buffer"
 import crypto from "node:crypto"
-import type { NewsItem } from "@shared/types"
 import { load } from "cheerio"
-import dayjs from "dayjs"
+import dayjs from "dayjs/esm/index.js" // try matching how it might resolve
 
 const commonHeaders = {
   "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36",
@@ -69,46 +68,13 @@ async function getWafToken() {
       wafTokenCache = { token: wafTokenId, expires: Date.now() + 1000 * 60 * 5 }
     }
     return wafTokenId || null
-  } catch {
+  } catch (e) {
+    console.error("waf error:", e)
     return null
   }
 }
 
-const quick = defineSource(async () => {
-  const token = await getWafToken()
-  const headers: Record<string, string> = { ...commonHeaders }
-  if (token) headers.Cookie = `_waftokenid=${token};`
-
-  const baseURL = rootUrl
-  const url = `${baseURL}/newsflashes`
-  const res = await fetch(url, { headers })
-  const response = await res.text()
-
-  const $ = load(response)
-  const news: NewsItem[] = []
-  const $items = $(".newsflash-item")
-  $items.each((_, el) => {
-    const $el = $(el)
-    const $a = $el.find("a.item-title")
-    const url = $a.attr("href")
-    const title = $a.text()
-    const relativeDate = $el.find(".time").text()
-    if (url && title && relativeDate) {
-      news.push({
-        url: `${baseURL}${url}`,
-        title,
-        id: url,
-        extra: {
-          date: parseRelativeDate(relativeDate, "Asia/Shanghai").valueOf(),
-        },
-      })
-    }
-  })
-
-  return news
-})
-
-const renqi = defineSource(async () => {
+async function renqi() {
   const token = await getWafToken()
   const headers: Record<string, string> = {
     ...commonHeaders,
@@ -120,37 +86,36 @@ const renqi = defineSource(async () => {
   const baseURL = rootUrl
   const formatted = dayjs().format("YYYY-MM-DD")
   const url = `${baseURL}/hot-list/renqi/${formatted}/1`
-
+  console.log("fetching:", url)
   const res = await fetch(url, { headers })
   const response = await res.text()
 
   const $ = load(response)
-  const articles: NewsItem[] = []
+  const articles: any[] = []
 
-  // 单条新闻选择器
   const $items = $(".article-item-info")
+  console.log("Found items:", $items.length)
+  if ($items.length === 0) {
+    console.log("HTML Start:", response.slice(0, 500))
+  }
 
   $items.each((_, el) => {
     const $el = $(el)
 
-    // 标题和链接
     const $a = $el.find("a.article-item-title.weight-bold")
     const href = $a.attr("href") || ""
     const title = $a.text().trim()
 
     const description = $el.find("a.article-item-description.ellipsis-2").text().trim()
 
-    // 作者
     const author = $el.find(".kr-flow-bar-author").text().trim()
-
-    // 热度
     const hot = $el.find(".kr-flow-bar-hot span").text().trim()
 
     if (href && title) {
       articles.push({
         url: href.startsWith("http") ? href : `${baseURL}${href}`,
         title,
-        id: href.slice(3), // 简化处理
+        id: href.slice(3),
         extra: {
           info: `${author}  |  ${hot}`,
           hover: description,
@@ -159,10 +124,6 @@ const renqi = defineSource(async () => {
     }
   })
   return articles
-})
+}
 
-export default defineSource({
-  "36kr": quick,
-  "36kr-quick": quick,
-  "36kr-renqi": renqi,
-})
+renqi().then(() => console.log("done")).catch(console.error)
