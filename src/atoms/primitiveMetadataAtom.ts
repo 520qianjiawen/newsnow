@@ -35,6 +35,60 @@ function createPrimitiveMetadataAtom(
 const initialMetadata = typeSafeObjectFromEntries(typeSafeObjectEntries(metadata)
   .filter(([id]) => fixedColumnIds.includes(id as any))
   .map(([id, val]) => [id, val.sources] as [FixedColumnID, SourceID[]]))
+
+const financePreferredIds: SourceID[] = ["xueqiu-hotstock", "jin10"]
+const clsPrefix = "cls-"
+const wallstreetcnPrefix = "wallstreetcn-"
+const techFirstId: SourceID = "36kr-quick"
+const techLastIds: SourceID[] = ["36kr-renqi", "producthunt"]
+const techAnchorId: SourceID = "ithome"
+const techAfterAnchorIds: SourceID[] = ["sspai", "juejin"]
+
+function withFinancePreferredFirst(items: SourceID[]) {
+  const preferred = financePreferredIds.filter(id => items.includes(id))
+  let rest = items.filter(id => !preferred.includes(id))
+
+  const hasCls = rest.some(id => id.startsWith(clsPrefix))
+  const hasWallstreetcn = rest.some(id => id.startsWith(wallstreetcnPrefix))
+  if (hasCls && hasWallstreetcn) {
+    const clsItems = rest.filter(id => id.startsWith(clsPrefix))
+    const restWithoutCls = rest.filter(id => !id.startsWith(clsPrefix))
+    const wallstreetcnIndex = restWithoutCls.findIndex(id => id.startsWith(wallstreetcnPrefix))
+    if (wallstreetcnIndex >= 0) {
+      rest = [
+        ...restWithoutCls.slice(0, wallstreetcnIndex),
+        ...clsItems,
+        ...restWithoutCls.slice(wallstreetcnIndex),
+      ]
+    } else {
+      rest = restWithoutCls
+    }
+  }
+
+  return [...preferred, ...rest]
+}
+
+function withTechPreferredOrder(items: SourceID[]) {
+  const first = items.includes(techFirstId) ? [techFirstId] : []
+  const last = techLastIds.filter(id => items.includes(id))
+  let middle = items.filter(id => id !== techFirstId && !last.includes(id))
+  const moveAfterAnchor = techAfterAnchorIds.filter(id => middle.includes(id))
+  middle = middle.filter(id => !moveAfterAnchor.includes(id))
+  if (moveAfterAnchor.length) {
+    const anchorIndex = middle.indexOf(techAnchorId)
+    if (anchorIndex >= 0) {
+      middle = [
+        ...middle.slice(0, anchorIndex + 1),
+        ...moveAfterAnchor,
+        ...middle.slice(anchorIndex + 1),
+      ]
+    } else {
+      middle = [...middle, ...moveAfterAnchor]
+    }
+  }
+  return [...first, ...middle, ...last]
+}
+
 export function preprocessMetadata(target: PrimitiveMetadata) {
   return {
     data: {
@@ -46,7 +100,10 @@ export function preprocessMetadata(target: PrimitiveMetadata) {
             if (id === "focus") return [id, s.filter(k => sources[k]).map(k => sources[k].redirect ?? k)]
             const oldS = s.filter(k => initialMetadata[id].includes(k)).map(k => sources[k].redirect ?? k)
             const newS = initialMetadata[id].filter(k => !oldS.includes(k))
-            return [id, [...oldS, ...newS]]
+            const merged = [...oldS, ...newS]
+            if (id === "finance") return [id, withFinancePreferredFirst(merged)]
+            if (id === "tech") return [id, withTechPreferredOrder(merged)]
+            return [id, merged]
           }),
       ),
     },

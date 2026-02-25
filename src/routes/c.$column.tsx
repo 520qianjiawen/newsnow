@@ -5,7 +5,8 @@ export const Route = createFileRoute("/c/$column")({
   component: SectionComponent,
   params: {
     parse: (params) => {
-      const column = fixedColumnIds.find(x => x === params.column.toLowerCase())
+      const normalizedColumn = params.column.toLowerCase() === "china" ? "news" : params.column.toLowerCase()
+      const column = fixedColumnIds.find(x => x === normalizedColumn)
       if (!column) throw new Error(`"${params.column}" is not a valid column.`)
       return {
         column,
