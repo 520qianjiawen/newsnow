@@ -10,7 +10,8 @@ export function Column({ id }: { id: FixedColumnID }) {
     setCurrentColumnID(id)
   }, [id, setCurrentColumnID])
 
-  useTitle(`NewsNow | ${metadata[id].name}`)
+  const pageTitle = id === "hottest" ? "今日国内外热门新闻与实时热搜 | NewsNow" : `NewsNow | ${metadata[id].name}`
+  useTitle(pageTitle)
 
   return (
     <>
