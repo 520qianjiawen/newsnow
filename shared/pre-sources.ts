@@ -103,7 +103,7 @@ export const originSources = {
       },
       renqi: {
         type: "hottest",
-        title: "快讯",
+        title: "人气榜",
       },
     },
   },

@@ -35,10 +35,12 @@ const financePreferredIds: SourceID[] = ["xueqiu-hotstock", "jin10"]
 const clsPrefix = "cls-"
 const wallstreetcnPrefix = "wallstreetcn-"
 const techFirstId: SourceID = "36kr-quick"
-const techLastIds: SourceID[] = ["36kr-renqi", "producthunt"]
+const techLastIds: SourceID[] = ["producthunt"]
 const techAnchorId: SourceID = "ithome"
 const techAfterAnchorIds: SourceID[] = ["sspai", "juejin"]
+const techExcludedIds: SourceID[] = ["36kr-renqi"]
 const hottestExcludedIds: SourceID[] = ["producthunt", "hackernews", "steam", "freebuf"]
+const realtimeExcludedIds: SourceID[] = ["pcbeta-windows11"]
 
 function withFinancePreferredFirst(items: SourceID[]) {
   const preferred = financePreferredIds.filter(id => items.includes(id))
@@ -102,7 +104,9 @@ export const metadata: Metadata = typeSafeObjectFromEntries(typeSafeObjectEntrie
     case "realtime":
       return [k, {
         name: v.zh,
-        sources: typeSafeObjectEntries(sources).filter(([, v]) => v.type === "realtime" && !v.redirect).map(([k]) => k as SourceID),
+        sources: typeSafeObjectEntries(sources)
+          .filter(([id, v]) => v.type === "realtime" && !v.redirect && !realtimeExcludedIds.includes(id as SourceID))
+          .map(([id]) => id as SourceID),
       }]
     case "news":
       return [k, {
@@ -117,7 +121,9 @@ export const metadata: Metadata = typeSafeObjectFromEntries(typeSafeObjectEntrie
     case "tech":
       return [k, {
         name: v.zh,
-        sources: withTechPreferredOrder(typeSafeObjectEntries(sources).filter(([, v]) => v.column === "tech" && !v.redirect).map(([k]) => k as SourceID)),
+        sources: withTechPreferredOrder(typeSafeObjectEntries(sources)
+          .filter(([id, v]) => v.column === "tech" && !v.redirect && !techExcludedIds.includes(id as SourceID))
+          .map(([id]) => id as SourceID)),
       }]
     default:
       return [k, {

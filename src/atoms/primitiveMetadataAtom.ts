@@ -40,7 +40,7 @@ const financePreferredIds: SourceID[] = ["xueqiu-hotstock", "jin10"]
 const clsPrefix = "cls-"
 const wallstreetcnPrefix = "wallstreetcn-"
 const techFirstId: SourceID = "36kr-quick"
-const techLastIds: SourceID[] = ["36kr-renqi", "producthunt"]
+const techLastIds: SourceID[] = ["producthunt"]
 const techAnchorId: SourceID = "ithome"
 const techAfterAnchorIds: SourceID[] = ["sspai", "juejin"]
 
