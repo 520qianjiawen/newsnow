@@ -38,6 +38,7 @@ const techFirstId: SourceID = "36kr-quick"
 const techLastIds: SourceID[] = ["36kr-renqi", "producthunt"]
 const techAnchorId: SourceID = "ithome"
 const techAfterAnchorIds: SourceID[] = ["sspai", "juejin"]
+const hottestExcludedIds: SourceID[] = ["producthunt", "hackernews", "steam", "freebuf"]
 
 function withFinancePreferredFirst(items: SourceID[]) {
   const preferred = financePreferredIds.filter(id => items.includes(id))
@@ -94,7 +95,9 @@ export const metadata: Metadata = typeSafeObjectFromEntries(typeSafeObjectEntrie
     case "hottest":
       return [k, {
         name: v.zh,
-        sources: typeSafeObjectEntries(sources).filter(([, v]) => v.type === "hottest" && !v.redirect).map(([k]) => k as SourceID),
+        sources: typeSafeObjectEntries(sources)
+          .filter(([id, v]) => v.type === "hottest" && !v.redirect && !hottestExcludedIds.includes(id as SourceID))
+          .map(([id]) => id as SourceID),
       }]
     case "realtime":
       return [k, {

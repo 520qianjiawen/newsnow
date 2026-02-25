@@ -43,7 +43,7 @@ function RootComponent() {
           !isMobile && "px-4",
           "h-full overflow-x-auto",
           "md:(px-10)",
-          "lg:(px-24)",
+          "lg:(px-20)",
         ])}
       >
         <header
