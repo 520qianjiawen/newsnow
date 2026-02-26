@@ -37,12 +37,46 @@ const initialMetadata = typeSafeObjectFromEntries(typeSafeObjectEntries(metadata
   .map(([id, val]) => [id, val.sources] as [FixedColumnID, SourceID[]]))
 
 const financePreferredIds: SourceID[] = ["xueqiu-hotstock", "jin10"]
+const financeAnchorId: SourceID = "gelonghui"
+const financeAfterAnchorIds: SourceID[] = ["mktnews-flash", "mktnews"]
 const clsPrefix = "cls-"
 const wallstreetcnPrefix = "wallstreetcn-"
 const techFirstId: SourceID = "36kr-quick"
 const techLastIds: SourceID[] = ["producthunt"]
 const techAnchorId: SourceID = "ithome"
 const techAfterAnchorIds: SourceID[] = ["sspai", "juejin"]
+const newsPreferredIds: SourceID[] = ["tencent-hot"]
+const newsAnchorId: SourceID = "toutiao"
+const newsAfterAnchorIds: SourceID[] = ["ifeng"]
+const hottestPreferredIds: SourceID[] = [
+  "zhihu",
+  "weibo",
+  "coolapk",
+  "36kr-renqi",
+  "tencent-hot",
+  "toutiao",
+  "douyin",
+  "ifeng",
+  "xueqiu-hotstock",
+  "kuaishou",
+  "baidu",
+  "thepaper",
+  "hupu",
+  "douban",
+  "tieba",
+  "cls-hot",
+  "nowcoder",
+  "sspai",
+  "juejin",
+  "wallstreetcn-hot",
+  "chongbuluo-hot",
+  "bilibili-hot-search",
+  "bilibili-hot-video",
+  "bilibili-ranking",
+  "qqvideo-tv-hotsearch",
+  "iqiyi-hot-ranklist",
+  "github-trending-today",
+]
 
 function withFinancePreferredFirst(items: SourceID[]) {
   const preferred = financePreferredIds.filter(id => items.includes(id))
@@ -62,6 +96,21 @@ function withFinancePreferredFirst(items: SourceID[]) {
       ]
     } else {
       rest = restWithoutCls
+    }
+  }
+
+  const moveAfterAnchor = financeAfterAnchorIds.filter(id => rest.includes(id))
+  rest = rest.filter(id => !moveAfterAnchor.includes(id))
+  if (moveAfterAnchor.length) {
+    const anchorIndex = rest.indexOf(financeAnchorId)
+    if (anchorIndex >= 0) {
+      rest = [
+        ...rest.slice(0, anchorIndex + 1),
+        ...moveAfterAnchor,
+        ...rest.slice(anchorIndex + 1),
+      ]
+    } else {
+      rest = [...rest, ...moveAfterAnchor]
     }
   }
 
@@ -89,6 +138,32 @@ function withTechPreferredOrder(items: SourceID[]) {
   return [...first, ...middle, ...last]
 }
 
+function withHottestPreferredOrder(items: SourceID[]) {
+  const preferred = hottestPreferredIds.filter(id => items.includes(id))
+  const rest = items.filter(id => !preferred.includes(id))
+  return [...preferred, ...rest]
+}
+
+function withNewsPreferredOrder(items: SourceID[]) {
+  const preferred = newsPreferredIds.filter(id => items.includes(id))
+  let rest = items.filter(id => !preferred.includes(id))
+  const moveAfterAnchor = newsAfterAnchorIds.filter(id => rest.includes(id))
+  rest = rest.filter(id => !moveAfterAnchor.includes(id))
+  if (moveAfterAnchor.length) {
+    const anchorIndex = rest.indexOf(newsAnchorId)
+    if (anchorIndex >= 0) {
+      rest = [
+        ...rest.slice(0, anchorIndex + 1),
+        ...moveAfterAnchor,
+        ...rest.slice(anchorIndex + 1),
+      ]
+    } else {
+      rest = [...rest, ...moveAfterAnchor]
+    }
+  }
+  return [...preferred, ...rest]
+}
+
 export function preprocessMetadata(target: PrimitiveMetadata) {
   return {
     data: {
@@ -101,6 +176,8 @@ export function preprocessMetadata(target: PrimitiveMetadata) {
             const oldS = s.filter(k => initialMetadata[id].includes(k)).map(k => sources[k].redirect ?? k)
             const newS = initialMetadata[id].filter(k => !oldS.includes(k))
             const merged = [...oldS, ...newS]
+            if (id === "news") return [id, withNewsPreferredOrder(merged)]
+            if (id === "hottest") return [id, withHottestPreferredOrder(merged)]
             if (id === "finance") return [id, withFinancePreferredFirst(merged)]
             if (id === "tech") return [id, withTechPreferredOrder(merged)]
             return [id, merged]

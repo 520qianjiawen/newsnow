@@ -32,6 +32,8 @@ export const columns = {
 export const fixedColumnIds = ["focus", "hottest", "realtime", "tech", "news", "world", "finance"] as const satisfies Partial<ColumnID>[]
 export const hiddenColumns = Object.keys(columns).filter(id => !fixedColumnIds.includes(id as any)) as HiddenColumnID[]
 const financePreferredIds: SourceID[] = ["xueqiu-hotstock", "jin10"]
+const financeAnchorId: SourceID = "gelonghui"
+const financeAfterAnchorIds: SourceID[] = ["mktnews-flash", "mktnews"]
 const clsPrefix = "cls-"
 const wallstreetcnPrefix = "wallstreetcn-"
 const techFirstId: SourceID = "36kr-quick"
@@ -41,6 +43,38 @@ const techAfterAnchorIds: SourceID[] = ["sspai", "juejin"]
 const techExcludedIds: SourceID[] = ["36kr-renqi"]
 const hottestExcludedIds: SourceID[] = ["producthunt", "hackernews", "steam", "freebuf"]
 const realtimeExcludedIds: SourceID[] = ["pcbeta-windows11"]
+const newsPreferredIds: SourceID[] = ["tencent-hot"]
+const newsAnchorId: SourceID = "toutiao"
+const newsAfterAnchorIds: SourceID[] = ["ifeng"]
+const hottestPreferredIds: SourceID[] = [
+  "zhihu",
+  "weibo",
+  "coolapk",
+  "36kr-renqi",
+  "tencent-hot",
+  "toutiao",
+  "douyin",
+  "ifeng",
+  "xueqiu-hotstock",
+  "kuaishou",
+  "baidu",
+  "thepaper",
+  "hupu",
+  "douban",
+  "tieba",
+  "cls-hot",
+  "nowcoder",
+  "sspai",
+  "juejin",
+  "wallstreetcn-hot",
+  "chongbuluo-hot",
+  "bilibili-hot-search",
+  "bilibili-hot-video",
+  "bilibili-ranking",
+  "qqvideo-tv-hotsearch",
+  "iqiyi-hot-ranklist",
+  "github-trending-today",
+]
 
 function withFinancePreferredFirst(items: SourceID[]) {
   const preferred = financePreferredIds.filter(id => items.includes(id))
@@ -60,6 +94,21 @@ function withFinancePreferredFirst(items: SourceID[]) {
       ]
     } else {
       rest = restWithoutCls
+    }
+  }
+
+  const moveAfterAnchor = financeAfterAnchorIds.filter(id => rest.includes(id))
+  rest = rest.filter(id => !moveAfterAnchor.includes(id))
+  if (moveAfterAnchor.length) {
+    const anchorIndex = rest.indexOf(financeAnchorId)
+    if (anchorIndex >= 0) {
+      rest = [
+        ...rest.slice(0, anchorIndex + 1),
+        ...moveAfterAnchor,
+        ...rest.slice(anchorIndex + 1),
+      ]
+    } else {
+      rest = [...rest, ...moveAfterAnchor]
     }
   }
 
@@ -87,6 +136,32 @@ function withTechPreferredOrder(items: SourceID[]) {
   return [...first, ...middle, ...last]
 }
 
+function withHottestPreferredOrder(items: SourceID[]) {
+  const preferred = hottestPreferredIds.filter(id => items.includes(id))
+  const rest = items.filter(id => !preferred.includes(id))
+  return [...preferred, ...rest]
+}
+
+function withNewsPreferredOrder(items: SourceID[]) {
+  const preferred = newsPreferredIds.filter(id => items.includes(id))
+  let rest = items.filter(id => !preferred.includes(id))
+  const moveAfterAnchor = newsAfterAnchorIds.filter(id => rest.includes(id))
+  rest = rest.filter(id => !moveAfterAnchor.includes(id))
+  if (moveAfterAnchor.length) {
+    const anchorIndex = rest.indexOf(newsAnchorId)
+    if (anchorIndex >= 0) {
+      rest = [
+        ...rest.slice(0, anchorIndex + 1),
+        ...moveAfterAnchor,
+        ...rest.slice(anchorIndex + 1),
+      ]
+    } else {
+      rest = [...rest, ...moveAfterAnchor]
+    }
+  }
+  return [...preferred, ...rest]
+}
+
 export const metadata: Metadata = typeSafeObjectFromEntries(typeSafeObjectEntries(columns).map(([k, v]) => {
   switch (k) {
     case "focus":
@@ -97,9 +172,9 @@ export const metadata: Metadata = typeSafeObjectFromEntries(typeSafeObjectEntrie
     case "hottest":
       return [k, {
         name: v.zh,
-        sources: typeSafeObjectEntries(sources)
+        sources: withHottestPreferredOrder(typeSafeObjectEntries(sources)
           .filter(([id, v]) => v.type === "hottest" && !v.redirect && !hottestExcludedIds.includes(id as SourceID))
-          .map(([id]) => id as SourceID),
+          .map(([id]) => id as SourceID)),
       }]
     case "realtime":
       return [k, {
@@ -111,7 +186,7 @@ export const metadata: Metadata = typeSafeObjectFromEntries(typeSafeObjectEntrie
     case "news":
       return [k, {
         name: v.zh,
-        sources: typeSafeObjectEntries(sources).filter(([, v]) => v.column === "china" && !v.redirect).map(([k]) => k as SourceID),
+        sources: withNewsPreferredOrder(typeSafeObjectEntries(sources).filter(([, v]) => v.column === "china" && !v.redirect).map(([k]) => k as SourceID)),
       }]
     case "finance":
       return [k, {
