@@ -49,6 +49,9 @@ importers:
       '@unocss/reset':
         specifier: ^66.0.0
         version: 66.1.1
+      '@vercel/analytics':
+        specifier: ^1.6.1
+        version: 1.6.1(react@19.1.0)(vue@3.5.13(typescript@5.8.3))
       ahooks:
         specifier: ^3.8.4
         version: 3.8.4(react@19.1.0)
@@ -2688,6 +2691,32 @@ packages:
     resolution: {integrity: sha512-friS8NEQfHaDbkThxopGk+LuE5v3iY0StruifjQEt7SLbA46OnfgMO15sOTkbpJkol6RB+1l1TYPXh0sCddpvA==}
     cpu: [x64]
     os: [win32]
+
+  '@vercel/analytics@1.6.1':
+    resolution: {integrity: sha512-oH9He/bEM+6oKlv3chWuOOcp8Y6fo6/PSro8hEkgCW3pu9/OiCXiUpRUogDh3Fs3LH2sosDrx8CxeOLBEE+afg==}
+    peerDependencies:
+      '@remix-run/react': ^2
+      '@sveltejs/kit': ^1 || ^2
+      next: '>= 13'
+      react: ^19
+      svelte: '>= 4'
+      vue: ^3
+      vue-router: ^4
+    peerDependenciesMeta:
+      '@remix-run/react':
+        optional: true
+      '@sveltejs/kit':
+        optional: true
+      next:
+        optional: true
+      react:
+        optional: true
+      svelte:
+        optional: true
+      vue:
+        optional: true
+      vue-router:
+        optional: true
 
   '@vercel/nft@0.27.7':
     resolution: {integrity: sha512-FG6H5YkP4bdw9Ll1qhmbxuE8KwW2E/g8fJpM183fWQLeVDGqzeywMIeJ9h2txdWZ03psgWMn6QymTxaDLmdwUg==}
@@ -9749,6 +9778,11 @@ snapshots:
 
   '@unrs/resolver-binding-win32-x64-msvc@1.7.2':
     optional: true
+
+  '@vercel/analytics@1.6.1(react@19.1.0)(vue@3.5.13(typescript@5.8.3))':
+    optionalDependencies:
+      react: 19.1.0
+      vue: 3.5.13(typescript@5.8.3)
 
   '@vercel/nft@0.27.7(rollup@4.40.2)':
     dependencies:

@@ -2,6 +2,7 @@ import ReactDOM from "react-dom/client"
 import { RouterProvider, createRouter } from "@tanstack/react-router"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { HelmetProvider } from "react-helmet-async"
+import { Analytics } from "@vercel/analytics/react"
 import { routeTree } from "./routeTree.gen"
 
 const queryClient = new QueryClient()
@@ -21,6 +22,7 @@ if (!rootElement.innerHTML) {
     <HelmetProvider>
       <QueryClientProvider client={queryClient}>
         <RouterProvider router={router} />
+        <Analytics />
       </QueryClientProvider>
     </HelmetProvider>,
   )
