@@ -29,7 +29,7 @@ export function Dnd() {
       {/* Use vertical scrolling instead of horizontal on mobile. */}
       <OverlayScrollbar defer className="overflow-y-auto">
         <motion.ol
-          className="grid w-full gap-6 max-md:px-3"
+          className="grid w-full gap-6 max-md:px-6"
           ref={parent}
           style={{
             gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
