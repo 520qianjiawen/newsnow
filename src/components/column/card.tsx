@@ -153,7 +153,7 @@ function NewsCard({ id, setHandleRef }: NewsCardProps) {
 
       <OverlayScrollbar
         className={$([
-          "h-full p-2 overflow-y-auto rounded-2xl bg-base bg-op-70!",
+          "h-full p-2 overflow-y-auto rounded-[10px] bg-base bg-op-70!",
           isFetching && `animate-pulse`,
           `sprinkle-${sources[id].color}`,
         ])}
@@ -189,7 +189,7 @@ function DiffNumber({ diff }: { diff: number }) {
 
   return (
     <AnimatePresence>
-      { shown && (
+      {shown && (
         <motion.span
           initial={{ opacity: 0, y: -15 }}
           animate={{ opacity: 0.5, y: -7 }}
