@@ -35,6 +35,10 @@ export function Column({ id }: { id: FixedColumnID }) {
         <meta name="twitter:title" content={pageTitle} />
         <meta name="twitter:description" content={pageDescription} />
       </Helmet>
+
+      {/* 这是一个为 SEO 准备的视觉隐藏的 H1 标签 */}
+      <h1 className="sr-only">{pageTitle}</h1>
+
       <div className="flex justify-center md:hidden mb-6">
         <NavBar />
       </div>
