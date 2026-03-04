@@ -22,10 +22,12 @@ export default defineSource({
           const yesPrice = Number(prices[0])
           if (!Number.isNaN(yesPrice)) {
             const prob = yesPrice * 100
-            if (prob > 0 && prob < 1) {
+            if (prob < 1) {
               priceText = "<1%"
+            } else if (prob > 99) {
+              priceText = ">99%"
             } else {
-              priceText = `${prob.toFixed(0)}%`
+              priceText = `${Math.round(prob)}%`
             }
           }
         } catch {
