@@ -53,13 +53,13 @@ export function Header() {
             </p>
           </span>
         </Link>
-        <div className="hidden lg:(flex ml-8 min-w-0 max-w-[250px] xl:max-w-[400px] 2xl:max-w-[600px] overflow-hidden items-center)">
-          <Ticker />
-        </div>
       </span>
-      <span className="justify-self-center">
-        <span className="hidden md:(inline-block)">
+      <span className="justify-self-center min-w-0">
+        <span className="hidden md:(inline-flex items-center) lg:gap-2 xl:gap-3 min-w-0">
           <NavBar />
+          <div className="hidden lg:(flex min-w-0 max-w-[250px]) xl:max-w-[400px] 2xl:max-w-[600px] overflow-hidden items-center">
+            <Ticker />
+          </div>
         </span>
       </span>
       <span className="justify-self-end flex gap-2 items-center text-xl text-primary-600 dark:text-primary">
