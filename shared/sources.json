@@ -534,6 +534,14 @@
     "color": "green",
     "interval": 600000
   },
+  "rsscrypto": {
+    "name": "RSS Crypto",
+    "cardSpan": 2,
+    "column": "coingecko",
+    "home": "https://www.rsscrypto.com/#newest/all",
+    "color": "orange",
+    "interval": 600000
+  },
   "polymarket": {
     "name": "Polymarket",
     "type": "hottest",

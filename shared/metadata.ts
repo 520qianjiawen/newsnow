@@ -46,6 +46,7 @@ const techAfterAnchorIds: SourceID[] = ["sspai", "juejin"]
 const techExcludedIds: SourceID[] = ["36kr-renqi"]
 const hottestExcludedIds: SourceID[] = ["producthunt", "hackernews", "steam", "freebuf"]
 const realtimeExcludedIds: SourceID[] = ["pcbeta-windows11"]
+const coingeckoExcludedIds: SourceID[] = ["polymarket"]
 const newsPreferredIds: SourceID[] = ["tencent-hot"]
 const newsAnchorId: SourceID = "toutiao"
 const newsAfterAnchorIds: SourceID[] = ["ifeng"]
@@ -202,6 +203,13 @@ export const metadata: Metadata = typeSafeObjectFromEntries(typeSafeObjectEntrie
         sources: withTechPreferredOrder(typeSafeObjectEntries(sources)
           .filter(([id, v]) => v.column === "tech" && !v.redirect && !techExcludedIds.includes(id as SourceID))
           .map(([id]) => id as SourceID)),
+      }]
+    case "coingecko":
+      return [k, {
+        name: v.zh,
+        sources: typeSafeObjectEntries(sources)
+          .filter(([id, v]) => v.column === "coingecko" && !v.redirect && !coingeckoExcludedIds.includes(id as SourceID))
+          .map(([id]) => id as SourceID),
       }]
     default:
       return [k, {

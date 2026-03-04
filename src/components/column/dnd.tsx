@@ -25,14 +25,14 @@ export function Dnd() {
   if (!items.length) return null
 
   return (
-    <DndWrapper items={items} setItems={setItems} isSingleColumn={isMobile}>
+    <DndWrapper items={items} setItems={setItems}>
       {/* Use vertical scrolling instead of horizontal on mobile. */}
       <OverlayScrollbar defer className="overflow-y-auto">
         <motion.ol
           className="grid w-full gap-6"
           ref={parent}
           style={{
-            gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
+            gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))",
           }}
           initial="hidden"
           animate="visible"
@@ -49,9 +49,10 @@ export function Dnd() {
             },
           }}
         >
-          {items.map((id, index) => (
+          {items.map(id => (
             <motion.li
               key={id}
+              className={sources[id].cardSpan === 2 ? "md:col-span-2" : undefined}
               transition={{
                 type: "tween",
                 duration: AnimationDuration / 1000,
@@ -82,10 +83,9 @@ export function Dnd() {
   )
 }
 
-function DndWrapper({ items, setItems, isSingleColumn, children }: PropsWithChildren<{
+function DndWrapper({ items, setItems, children }: PropsWithChildren<{
   items: SourceID[]
   setItems: (items: SourceID[]) => void
-  isSingleColumn: boolean
 }>) {
   const onDropTargetChange = useCallback(({ location, source }: BaseEventPayload<ElementDragType>) => {
     const traget = location.current.dropTargets[0]
@@ -103,7 +103,7 @@ function DndWrapper({ items, setItems, isSingleColumn, children }: PropsWithChil
       axis: "vertical",
     })
     setItems(update)
-  }, [items, setItems, isSingleColumn])
+  }, [items, setItems])
   // 避免动画干扰
   const { run } = useThrottleFn(onDropTargetChange, {
     leading: true,

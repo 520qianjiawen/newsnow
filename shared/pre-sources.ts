@@ -460,6 +460,13 @@ export const originSources = {
     color: "green",
     home: "https://www.coingecko.com",
   },
+  "rsscrypto": {
+    name: "RSS Crypto",
+    column: "coingecko",
+    color: "orange",
+    cardSpan: 2,
+    home: "https://www.rsscrypto.com/#newest/all",
+  },
   "polymarket": {
     name: "Polymarket",
     column: "coingecko",
@@ -573,6 +580,7 @@ export function genSources() {
       type: source.type,
       disable: source.disable,
       desc: source.desc,
+      cardSpan: source.cardSpan,
       column: source.column,
       home: source.home,
       color: source.color ?? "primary",

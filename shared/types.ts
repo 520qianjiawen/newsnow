@@ -70,6 +70,11 @@ export interface Source {
    * Default normal timeline
    */
   type?: "hottest" | "realtime"
+  /**
+   * Card width span in grid layout.
+   * `2` means double-width card on desktop grids.
+   */
+  cardSpan?: 1 | 2
   column?: ColumnID
   home?: string
   /**

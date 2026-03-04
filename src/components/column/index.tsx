@@ -40,10 +40,14 @@ export function Column({ id }: { id: FixedColumnID }) {
       {/* 这是一个为 SEO 准备的视觉隐藏的 H1 标签 */}
       <h1 className="sr-only">{pageTitle}</h1>
 
-      <div className="md:hidden mb-3 px-2">
+      <div className="md:hidden mb-3 flex justify-center">
         <div className="grid grid-cols-2 gap-3">
-          <Ticker sourceId="finance-indices" />
-          <Ticker sourceId="finance-forex" />
+          <div className="w-[44vw] max-w-[180px] min-w-[130px]">
+            <Ticker sourceId="finance-indices" />
+          </div>
+          <div className="w-[44vw] max-w-[180px] min-w-[130px]">
+            <Ticker sourceId="finance-forex" />
+          </div>
         </div>
       </div>
       <div className="flex justify-center md:hidden mb-6">
