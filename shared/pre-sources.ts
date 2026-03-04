@@ -526,6 +526,22 @@ export const originSources = {
       },
     },
   },
+  "finance": {
+    name: "全球市场",
+    column: "finance",
+    color: "emerald",
+    home: "https://finance.yahoo.com",
+    sub: {
+      indices: {
+        title: "股票指数",
+        interval: Time.Realtime,
+      },
+      commodities: {
+        title: "大宗商品",
+        interval: Time.Realtime,
+      },
+    },
+  },
 } as const satisfies Record<string, OriginSource>
 
 export function genSources() {

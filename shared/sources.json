@@ -614,5 +614,30 @@
     "color": "green",
     "interval": 1800000,
     "title": "热播榜"
+  },
+  "finance": {
+    "redirect": "finance-indices",
+    "name": "全球市场",
+    "column": "finance",
+    "home": "https://finance.yahoo.com",
+    "color": "emerald",
+    "interval": 120000,
+    "title": "股票指数"
+  },
+  "finance-indices": {
+    "name": "全球市场",
+    "column": "finance",
+    "home": "https://finance.yahoo.com",
+    "color": "emerald",
+    "interval": 120000,
+    "title": "股票指数"
+  },
+  "finance-commodities": {
+    "name": "全球市场",
+    "column": "finance",
+    "home": "https://finance.yahoo.com",
+    "color": "emerald",
+    "interval": 120000,
+    "title": "大宗商品"
   }
 }
