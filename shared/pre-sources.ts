@@ -467,6 +467,36 @@ export const originSources = {
     color: "blue",
     home: "https://polymarket.com",
   },
+  "reuters": {
+    name: "Reuters",
+    column: "world",
+    color: "orange",
+    home: "https://www.reuters.com",
+  },
+  "bbc": {
+    name: "BBC News",
+    column: "world",
+    color: "red",
+    home: "https://www.bbc.com",
+  },
+  "apnews": {
+    name: "AP News",
+    column: "world",
+    color: "blue",
+    home: "https://apnews.com",
+  },
+  "aljazeera": {
+    name: "Al Jazeera",
+    column: "world",
+    color: "yellow",
+    home: "https://www.aljazeera.com",
+  },
+  "guardian": {
+    name: "The Guardian",
+    column: "world",
+    color: "blue",
+    home: "https://www.theguardian.com",
+  },
   "qqvideo": {
     name: "腾讯视频",
     column: "china",

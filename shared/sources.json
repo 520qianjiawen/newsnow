@@ -542,6 +542,41 @@
     "color": "blue",
     "interval": 600000
   },
+  "reuters": {
+    "name": "Reuters",
+    "column": "world",
+    "home": "https://www.reuters.com",
+    "color": "orange",
+    "interval": 600000
+  },
+  "bbc": {
+    "name": "BBC News",
+    "column": "world",
+    "home": "https://www.bbc.com",
+    "color": "red",
+    "interval": 600000
+  },
+  "apnews": {
+    "name": "AP News",
+    "column": "world",
+    "home": "https://apnews.com",
+    "color": "blue",
+    "interval": 600000
+  },
+  "aljazeera": {
+    "name": "Al Jazeera",
+    "column": "world",
+    "home": "https://www.aljazeera.com",
+    "color": "yellow",
+    "interval": 600000
+  },
+  "guardian": {
+    "name": "The Guardian",
+    "column": "world",
+    "home": "https://www.theguardian.com",
+    "color": "blue",
+    "interval": 600000
+  },
   "qqvideo": {
     "redirect": "qqvideo-tv-hotsearch",
     "name": "腾讯视频",
