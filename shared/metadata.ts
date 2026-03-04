@@ -27,9 +27,12 @@ export const columns = {
   hottest: {
     zh: "最热",
   },
+  coingecko: {
+    zh: "CoinGecko",
+  },
 } as const
 
-export const fixedColumnIds = ["focus", "hottest", "realtime", "tech", "news", "world", "finance"] as const satisfies Partial<ColumnID>[]
+export const fixedColumnIds = ["focus", "hottest", "realtime", "tech", "news", "world", "finance", "coingecko"] as const satisfies Partial<ColumnID>[]
 export const hiddenColumns = Object.keys(columns).filter(id => !fixedColumnIds.includes(id as any)) as HiddenColumnID[]
 const financePreferredIds: SourceID[] = ["xueqiu-hotstock", "jin10"]
 const clsPrefix = "cls-"

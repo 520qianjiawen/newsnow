@@ -453,7 +453,13 @@ export const originSources = {
     type: "hottest",
     home: "https://www.freebuf.com/",
   },
-
+  "coingecko": {
+    name: "CoinGecko",
+    column: "finance",
+    type: "hottest",
+    color: "green",
+    home: "https://www.coingecko.com",
+  },
   "qqvideo": {
     name: "腾讯视频",
     column: "china",

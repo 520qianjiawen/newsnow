@@ -526,6 +526,14 @@
     "color": "green",
     "interval": 600000
   },
+  "coingecko": {
+    "name": "CoinGecko",
+    "type": "hottest",
+    "column": "finance",
+    "home": "https://www.coingecko.com",
+    "color": "green",
+    "interval": 600000
+  },
   "qqvideo": {
     "redirect": "qqvideo-tv-hotsearch",
     "name": "腾讯视频",
