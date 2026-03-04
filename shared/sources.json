@@ -542,6 +542,13 @@
     "color": "blue",
     "interval": 600000
   },
+  "panews": {
+    "name": "PANews",
+    "column": "coingecko",
+    "home": "https://www.panewslab.com",
+    "color": "blue",
+    "interval": 600000
+  },
   "reuters": {
     "name": "Reuters",
     "column": "world",

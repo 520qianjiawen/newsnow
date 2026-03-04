@@ -467,6 +467,12 @@ export const originSources = {
     color: "blue",
     home: "https://polymarket.com",
   },
+  "panews": {
+    name: "PANews",
+    column: "coingecko",
+    color: "blue",
+    home: "https://www.panewslab.com",
+  },
   "reuters": {
     name: "Reuters",
     column: "world",
