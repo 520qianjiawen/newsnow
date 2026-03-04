@@ -653,5 +653,13 @@
     "color": "emerald",
     "interval": 120000,
     "title": "大宗商品"
+  },
+  "finance-currencies": {
+    "name": "全球市场",
+    "column": "finance",
+    "home": "https://finance.yahoo.com",
+    "color": "emerald",
+    "interval": 120000,
+    "title": "外汇汇率"
   }
 }
