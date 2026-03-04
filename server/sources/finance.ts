@@ -46,6 +46,9 @@ async function indices() {
     { id: "sp500", sym: "^GSPC", name: "S&P 500" },
     { id: "nasdaq", sym: "^IXIC", name: "Nasdaq" },
     { id: "dow", sym: "^DJI", name: "Dow Jones" },
+    { id: "sse", sym: "000001.SS", name: "上证指数" },
+    { id: "szse", sym: "399001.SZ", name: "深证成指" },
+    { id: "hsi", sym: "^HSI", name: "恒生指数" },
   ]
   const results = await Promise.all(symbols.map(async (s) => {
     const data = await fetchYahoo(s.sym)

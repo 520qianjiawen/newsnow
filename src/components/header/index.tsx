@@ -2,6 +2,7 @@ import { Link } from "@tanstack/react-router"
 import { useIsFetching } from "@tanstack/react-query"
 import type { SourceID } from "@shared/types"
 import { NavBar } from "../navbar"
+import { Ticker } from "./ticker"
 import { currentSourcesAtom, goToTopAtom } from "~/atoms"
 
 function GoTop() {
@@ -52,6 +53,9 @@ export function Header() {
             </p>
           </span>
         </Link>
+        <div className="hidden lg:(flex ml-8 max-w-[400px] xl:max-w-[600px] overflow-hidden items-center)">
+          <Ticker />
+        </div>
       </span>
       <span className="justify-self-center">
         <span className="hidden md:(inline-block)">

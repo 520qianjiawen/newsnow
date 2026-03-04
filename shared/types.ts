@@ -99,6 +99,7 @@ export interface NewsItem {
       url: string
       scale: number
     }
+    prefix?: string
   }
 }
 
