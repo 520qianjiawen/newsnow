@@ -56,9 +56,12 @@ export function Header() {
       </span>
       <span className="justify-self-center min-w-0">
         <span className="hidden md:(inline-flex items-center) lg:gap-2 xl:gap-3 min-w-0">
+          <div className="flex min-w-0 max-w-[170px] lg:max-w-[250px] xl:max-w-[400px] 2xl:max-w-[600px] overflow-hidden items-center">
+            <Ticker sourceId="finance-indices" />
+          </div>
           <NavBar />
-          <div className="hidden lg:(flex min-w-0 max-w-[250px]) xl:max-w-[400px] 2xl:max-w-[600px] overflow-hidden items-center">
-            <Ticker />
+          <div className="flex min-w-0 max-w-[170px] lg:max-w-[250px] xl:max-w-[400px] 2xl:max-w-[600px] overflow-hidden items-center">
+            <Ticker sourceId="finance-forex" />
           </div>
         </span>
       </span>

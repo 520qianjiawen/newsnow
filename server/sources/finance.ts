@@ -43,6 +43,28 @@ async function fetchYahoo(symbol: string) {
 
 async function indices() {
   const symbols = [
+    { id: "sse", sym: "000001.SS", name: "上证指数" },
+    { id: "hsi", sym: "^HSI", name: "恒生指数" },
+    { id: "nasdaq", sym: "^IXIC", name: "纳斯达克指数" },
+  ]
+  const results = await Promise.all(symbols.map(async (s) => {
+    const data = await fetchYahoo(s.sym)
+    if (!data) return null
+    return {
+      id: `finance-indices-${s.id}`,
+      title: s.name,
+      url: `https://finance.yahoo.com/quote/${encodeURIComponent(s.sym)}`,
+      extra: {
+        info: data.price,
+        prefix: data.change,
+      },
+    }
+  }))
+  return results.filter(Boolean) as any
+}
+
+async function forex() {
+  const symbols = [
     { id: "usdcny", sym: "USDCNY=X", name: "美元/人民币" },
     { id: "eurcny", sym: "EURCNY=X", name: "欧元/人民币" },
     { id: "gbpcny", sym: "GBPCNY=X", name: "英镑/人民币" },
@@ -51,7 +73,7 @@ async function indices() {
     const data = await fetchYahoo(s.sym)
     if (!data) return null
     return {
-      id: `finance-indices-${s.id}`,
+      id: `finance-forex-${s.id}`,
       title: s.name,
       url: `https://finance.yahoo.com/quote/${encodeURIComponent(s.sym)}`,
       extra: {
@@ -87,6 +109,7 @@ async function commodities() {
 
 export default defineSource({
   "finance-indices": indices,
+  "finance-forex": forex,
   "finance-commodities": commodities,
   "finance-news": defineRSSSource("https://news.google.com/rss/search?q=site:finance.yahoo.com+when:24h&hl=en-US&gl=US&ceid=US:en"),
 })

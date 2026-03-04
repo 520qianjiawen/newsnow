@@ -548,6 +548,10 @@ export const originSources = {
         title: "股票指数",
         interval: Time.Realtime,
       },
+      forex: {
+        title: "汇率",
+        interval: Time.Realtime,
+      },
       commodities: {
         title: "大宗商品",
         interval: Time.Realtime,
