@@ -529,9 +529,17 @@
   "coingecko": {
     "name": "CoinGecko",
     "type": "hottest",
-    "column": "finance",
+    "column": "coingecko",
     "home": "https://www.coingecko.com",
     "color": "green",
+    "interval": 600000
+  },
+  "polymarket": {
+    "name": "Polymarket",
+    "type": "hottest",
+    "column": "coingecko",
+    "home": "https://polymarket.com",
+    "color": "blue",
     "interval": 600000
   },
   "qqvideo": {

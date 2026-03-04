@@ -40,12 +40,15 @@ export default defineSource({
       const priceChange = item.data.price_change_percentage_24h.usd?.toFixed(2)
       const changeText = priceChange ? `${priceChange}%` : ""
 
+      const price = Number(item.data.price)
+      const formattedPrice = price < 0.0001 ? price.toString() : price.toFixed(4)
+
       return {
         id: item.id,
         title: `${item.name} (${item.symbol})`,
         url: `https://www.coingecko.com/en/coins/${item.slug}`,
         extra: {
-          info: `$${item.data.price} ${changeText}`,
+          info: `$${formattedPrice} ${changeText}`,
           icon: {
             url: item.small,
             scale: 1,

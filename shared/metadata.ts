@@ -28,7 +28,7 @@ export const columns = {
     zh: "最热",
   },
   coingecko: {
-    zh: "CoinGecko",
+    zh: "加密货币",
   },
 } as const
 

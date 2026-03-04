@@ -455,10 +455,17 @@ export const originSources = {
   },
   "coingecko": {
     name: "CoinGecko",
-    column: "finance",
+    column: "coingecko",
     type: "hottest",
     color: "green",
     home: "https://www.coingecko.com",
+  },
+  "polymarket": {
+    name: "Polymarket",
+    column: "coingecko",
+    type: "hottest",
+    color: "blue",
+    home: "https://polymarket.com",
   },
   "qqvideo": {
     name: "腾讯视频",
