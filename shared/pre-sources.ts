@@ -556,10 +556,6 @@ export const originSources = {
         title: "财经新闻",
         interval: Time.Common,
       },
-      currencies: {
-        title: "外汇汇率",
-        interval: Time.Realtime,
-      },
     },
   },
 } as const satisfies Record<string, OriginSource>

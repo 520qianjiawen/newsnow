@@ -2,6 +2,7 @@ import { myFetch } from "./server/utils/fetch"
 
 globalThis.defineSource = (o: any) => o
 globalThis.myFetch = myFetch
+globalThis.defineRSSSource = () => { }
 
 async function testFinance() {
   const { default: financeSource } = await import("./server/sources/finance")

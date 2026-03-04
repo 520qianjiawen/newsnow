@@ -53,7 +53,7 @@ function RootComponent() {
             "sticky top-0 z-10 backdrop-blur-md",
           ])}
           style={{
-            gridTemplateColumns: "50px auto 50px",
+            gridTemplateColumns: "1fr auto 1fr",
           }}
         >
           <Header />

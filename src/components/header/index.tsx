@@ -42,9 +42,9 @@ function Refresh() {
 export function Header() {
   return (
     <>
-      <span className="flex justify-self-start">
-        <Link to="/" className="flex gap-2 items-center">
-          <div className="h-10 w-10 bg-cover" title="logo" style={{ backgroundImage: "url(/icon.svg)" }} />
+      <span className="flex items-center min-w-0">
+        <Link to="/" className="flex gap-2 items-center flex-shrink-0">
+          <div className="h-10 w-10 bg-cover flex-shrink-0" title="logo" style={{ backgroundImage: "url(/icon.svg)" }} />
           <span className="text-2xl font-brand line-height-none!">
             <p>News</p>
             <p className="mt--1">
@@ -53,7 +53,7 @@ export function Header() {
             </p>
           </span>
         </Link>
-        <div className="hidden lg:(flex ml-8 max-w-[400px] xl:max-w-[600px] overflow-hidden items-center)">
+        <div className="hidden lg:(flex ml-8 min-w-0 max-w-[250px] xl:max-w-[400px] 2xl:max-w-[600px] overflow-hidden items-center)">
           <Ticker />
         </div>
       </span>
