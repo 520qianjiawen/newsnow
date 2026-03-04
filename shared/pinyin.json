@@ -60,5 +60,6 @@
   "iqiyi-hot-ranklist": "aiqiyi-rebobang",
   "finance-indices": "quanqiushichang-gupiaozhishu",
   "finance-commodities": "quanqiushichang-dazongshangpin",
+  "finance-news": "quanqiushichang-caijingxinwen",
   "finance-currencies": "quanqiushichang-waihuihuilü"
 }

@@ -552,6 +552,10 @@ export const originSources = {
         title: "大宗商品",
         interval: Time.Realtime,
       },
+      news: {
+        title: "财经新闻",
+        interval: Time.Common,
+      },
       currencies: {
         title: "外汇汇率",
         interval: Time.Realtime,

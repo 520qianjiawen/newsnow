@@ -115,4 +115,5 @@ export default defineSource({
   "finance-indices": indices,
   "finance-commodities": commodities,
   "finance-currencies": currencies,
+  "finance-news": defineRSSSource("https://news.google.com/rss/search?q=site:finance.yahoo.com+when:24h&hl=en-US&gl=US&ceid=US:en"),
 })
