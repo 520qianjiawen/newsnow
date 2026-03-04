@@ -5,10 +5,10 @@ globalThis.myFetch = myFetch
 
 async function testFinance() {
   const { default: financeSource } = await import("./server/sources/finance")
-  const currenciesGetter = (financeSource as any)["finance-currencies"]
-  if (typeof currenciesGetter === "function") {
-    const data = await currenciesGetter()
-    console.log("Currencies data:", JSON.stringify(data, null, 2))
+  const indicesGetter = (financeSource as any)["finance-indices"]
+  if (typeof indicesGetter === "function") {
+    const data = await indicesGetter()
+    console.log("Indices data:", JSON.stringify(data, null, 2))
   }
 }
 
