@@ -17,7 +17,10 @@ async function fetchYahoo(symbol: string) {
     const url = `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(symbol)}`
     const res: YahooChartResponse = await myFetch(url, {
       headers: {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
+        "Accept": "*/*",
+        "Origin": "https://finance.yahoo.com",
+        "Referer": "https://finance.yahoo.com/",
       },
     })
     const meta = res.chart.result?.[0]?.meta
@@ -32,8 +35,8 @@ async function fetchYahoo(symbol: string) {
       change: `${change > 0 ? "+" : ""}${change.toFixed(2)}%`,
       isUp: change > 0,
     }
-  } catch (e) {
-    console.error(`Yahoo Finance fetch failed for ${symbol}:`, e)
+  } catch {
+    // silent fail
     return null
   }
 }
@@ -48,7 +51,7 @@ async function indices() {
     const data = await fetchYahoo(s.sym)
     if (!data) return null
     return {
-      id: s.id,
+      id: `finance-indices-${s.id}`,
       title: s.name,
       url: `https://finance.yahoo.com/quote/${encodeURIComponent(s.sym)}`,
       extra: {
@@ -57,8 +60,7 @@ async function indices() {
       },
     }
   }))
-  const filtered = results.filter(Boolean)
-  return filtered.length > 0 ? filtered : null
+  return results.filter(Boolean) as any
 }
 
 async function commodities() {
@@ -71,7 +73,7 @@ async function commodities() {
     const data = await fetchYahoo(s.sym)
     if (!data) return null
     return {
-      id: s.id,
+      id: `finance-commodities-${s.id}`,
       title: s.name,
       url: `https://finance.yahoo.com/quote/${encodeURIComponent(s.sym)}`,
       extra: {
@@ -80,8 +82,7 @@ async function commodities() {
       },
     }
   }))
-  const filtered = results.filter(Boolean)
-  return filtered.length > 0 ? filtered : null
+  return results.filter(Boolean) as any
 }
 
 export default defineSource({
