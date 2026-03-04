@@ -4,6 +4,7 @@ interface PolymarketEvent {
   slug: string
   markets: {
     outcomePrices: string // JSON string array
+    volume?: string | number
   }[]
 }
 
@@ -13,9 +14,13 @@ export default defineSource({
     const res: PolymarketEvent[] = await myFetch(url)
 
     return res.map((event) => {
-      const mainMarket = event.markets?.[0]
-      let priceText = ""
+      // Find the best market in the event (highest volume, active)
+      const activeMarkets = event.markets?.filter(m => m.outcomePrices && m.outcomePrices !== "[\"0\", \"1\"]") || []
+      const mainMarket = activeMarkets.length > 0
+        ? activeMarkets.sort((a, b) => Number(b.volume || 0) - Number(a.volume || 0))[0]
+        : event.markets?.[0]
 
+      let priceText = ""
       if (mainMarket?.outcomePrices) {
         try {
           const prices = JSON.parse(mainMarket.outcomePrices)
