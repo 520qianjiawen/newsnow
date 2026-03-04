@@ -5,6 +5,7 @@ interface YahooChartResponse {
         symbol: string
         regularMarketPrice: number
         previousClose: number
+        chartPreviousClose?: number
         regularMarketChangePercent: number
       }
     }[]
@@ -23,7 +24,8 @@ async function fetchYahoo(symbol: string) {
     if (!meta) return null
 
     const price = meta.regularMarketPrice
-    const change = meta.regularMarketChangePercent || ((price - (meta.previousClose || meta.chartPreviousClose || 0)) / (meta.previousClose || meta.chartPreviousClose || 1)) * 100
+    const prev = meta.previousClose || meta.chartPreviousClose || 0
+    const change = meta.regularMarketChangePercent || (prev ? ((price - prev) / prev) * 100 : 0)
 
     return {
       price: price.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
@@ -36,47 +38,53 @@ async function fetchYahoo(symbol: string) {
   }
 }
 
+async function indices() {
+  const symbols = [
+    { id: "sp500", sym: "^GSPC", name: "S&P 500" },
+    { id: "nasdaq", sym: "^IXIC", name: "Nasdaq" },
+    { id: "dow", sym: "^DJI", name: "Dow Jones" },
+  ]
+  const results = await Promise.all(symbols.map(async (s) => {
+    const data = await fetchYahoo(s.sym)
+    if (!data) return null
+    return {
+      id: s.id,
+      title: s.name,
+      url: `https://finance.yahoo.com/quote/${encodeURIComponent(s.sym)}`,
+      extra: {
+        info: data.price,
+        prefix: data.change,
+      },
+    }
+  }))
+  const filtered = results.filter(Boolean)
+  return filtered.length > 0 ? filtered : null
+}
+
+async function commodities() {
+  const symbols = [
+    { id: "gold", sym: "GC=F", name: "黄金 (Gold)" },
+    { id: "oil", sym: "CL=F", name: "原油 (WTI)" },
+    { id: "copper", sym: "HG=F", name: "铜 (Copper)" },
+  ]
+  const results = await Promise.all(symbols.map(async (s) => {
+    const data = await fetchYahoo(s.sym)
+    if (!data) return null
+    return {
+      id: s.id,
+      title: s.name,
+      url: `https://finance.yahoo.com/quote/${encodeURIComponent(s.sym)}`,
+      extra: {
+        info: data.price,
+        prefix: data.change,
+      },
+    }
+  }))
+  const filtered = results.filter(Boolean)
+  return filtered.length > 0 ? filtered : null
+}
+
 export default defineSource({
-  indices: async () => {
-    const symbols = [
-      { id: "sp500", sym: "^GSPC", name: "S&P 500" },
-      { id: "nasdaq", sym: "^IXIC", name: "Nasdaq" },
-      { id: "dow", sym: "^DJI", name: "Dow Jones" },
-    ]
-    const results = await Promise.all(symbols.map(async (s) => {
-      const data = await fetchYahoo(s.sym)
-      if (!data) return null
-      return {
-        id: s.id,
-        title: s.name,
-        url: `https://finance.yahoo.com/quote/${encodeURIComponent(s.sym)}`,
-        extra: {
-          info: data.price,
-          prefix: data.change,
-        },
-      }
-    }))
-    return (results.filter(Boolean) as any).length > 0 ? results.filter(Boolean) : null
-  },
-  commodities: async () => {
-    const symbols = [
-      { id: "gold", sym: "GC=F", name: "黄金 (Gold)" },
-      { id: "oil", sym: "CL=F", name: "原油 (WTI)" },
-      { id: "copper", sym: "HG=F", name: "铜 (Copper)" },
-    ]
-    const results = await Promise.all(symbols.map(async (s) => {
-      const data = await fetchYahoo(s.sym)
-      if (!data) return null
-      return {
-        id: s.id,
-        title: s.name,
-        url: `https://finance.yahoo.com/quote/${encodeURIComponent(s.sym)}`,
-        extra: {
-          info: data.price,
-          prefix: data.change,
-        },
-      }
-    }))
-    return (results.filter(Boolean) as any).length > 0 ? results.filter(Boolean) : null
-  },
+  "finance-indices": indices,
+  "finance-commodities": commodities,
 })
