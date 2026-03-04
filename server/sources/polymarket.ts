@@ -21,7 +21,12 @@ export default defineSource({
           const prices = JSON.parse(mainMarket.outcomePrices)
           const yesPrice = Number(prices[0])
           if (!Number.isNaN(yesPrice)) {
-            priceText = `${(yesPrice * 100).toFixed(0)}%`
+            const prob = yesPrice * 100
+            if (prob > 0 && prob < 1) {
+              priceText = "<1%"
+            } else {
+              priceText = `${prob.toFixed(0)}%`
+            }
           }
         } catch {
           // ignore parse error
