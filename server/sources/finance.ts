@@ -82,10 +82,34 @@ async function commodities() {
       },
     }
   }))
-  return results.filter(Boolean) as any
+  return (results.filter(Boolean) as any) || []
+}
+
+async function currencies() {
+  const symbols = [
+    { id: "usdcny", sym: "USDCNY=X", name: "美元/人民币 (USD/CNY)" },
+    { id: "eurusd", sym: "EURUSD=X", name: "欧元/美元 (EUR/USD)" },
+    { id: "gbpusd", sym: "GBPUSD=X", name: "英镑/美元 (GBP/USD)" },
+    { id: "usdjpy", sym: "USDJPY=X", name: "美元/日元 (USD/JPY)" },
+  ]
+  const results = await Promise.all(symbols.map(async (s) => {
+    const data = await fetchYahoo(s.sym)
+    if (!data) return null
+    return {
+      id: `finance-currencies-${s.id}`,
+      title: s.name,
+      url: `https://finance.yahoo.com/quote/${encodeURIComponent(s.sym)}`,
+      extra: {
+        info: data.price,
+        prefix: data.change,
+      },
+    }
+  }))
+  return (results.filter(Boolean) as any) || []
 }
 
 export default defineSource({
   "finance-indices": indices,
   "finance-commodities": commodities,
+  "finance-currencies": currencies,
 })
