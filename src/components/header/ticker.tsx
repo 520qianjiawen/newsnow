@@ -8,8 +8,8 @@ interface TickerProps {
 function TickerItem({ item }: { item: SourceResponse["items"][number] }) {
   const isUp = item.extra?.prefix?.startsWith("+")
   return (
-    <div className="flex gap-2 items-center min-w-0">
-      <span className="font-bold truncate">{item.title}</span>
+    <div className="flex gap-2 items-center min-w-0 leading-tight">
+      <span className="font-bold truncate text-xs">{item.title}</span>
       <span>{item.extra?.info}</span>
       <span className={isUp ? "text-green" : "text-red"}>
         {item.extra?.prefix}
@@ -31,39 +31,70 @@ export function Ticker({ sourceId }: TickerProps) {
     refetchInterval: 1000 * 60 * 5, // auto refetch every 5 mins
   })
 
+  const rowHeight = 20
+  const visibleRows = 2
+  const items = useMemo(() => data?.items || [], [data?.items])
+  const rollingItems = useMemo(() => {
+    if (!items.length) return []
+    const originals = items.map(item => ({
+      key: `item-${item.id}`,
+      item,
+    }))
+    if (items.length <= 1) return originals
+    const clones = items.slice(0, visibleRows).map((item, i) => ({
+      key: `clone-${item.id}-${i}`,
+      item,
+    }))
+    return [...originals, ...clones]
+  }, [items])
   const [idx, setIdx] = useState(0)
+  const [animate, setAnimate] = useState(true)
+
   useEffect(() => {
-    if (!data?.items?.length || data.items.length <= 1) return
+    if (items.length <= 1) return
     const timer = setInterval(() => {
-      setIdx(prev => (prev + 1) % data.items.length)
-    }, 3000)
+      setIdx(prev => prev + 1)
+    }, 3200)
     return () => clearInterval(timer)
-  }, [data?.items])
+  }, [items.length])
 
   useEffect(() => {
     setIdx(0)
-  }, [data?.items?.length, sourceId])
+    setAnimate(true)
+  }, [items.length, sourceId])
+
+  useEffect(() => {
+    if (items.length <= 1 || idx < items.length) return
+    const timer = setTimeout(() => {
+      setAnimate(false)
+      setIdx(0)
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          setAnimate(true)
+        })
+      })
+    }, 520)
+    return () => clearTimeout(timer)
+  }, [idx, items.length])
 
   if (!data?.items?.length) return null
 
   return (
     <div className="flex items-center overflow-hidden flex-1 select-none pointer-events-none text-sm op-80 min-w-0">
-      <div className="lg:hidden overflow-hidden w-full">
+      <div className="overflow-hidden w-full h-[40px]">
         <div
-          className="flex transition-transform duration-500 ease-out"
-          style={{ transform: `translateX(-${idx * 100}%)` }}
+          className="flex flex-col ease-out"
+          style={{
+            transform: `translateY(-${idx * rowHeight}px)`,
+            transition: animate ? "transform 500ms" : "none",
+          }}
         >
-          {data.items.map(item => (
-            <div key={item.id} className="w-full shrink-0 flex justify-center">
+          {rollingItems.map(({ key, item }) => (
+            <div key={key} className="h-[20px] flex items-center">
               <TickerItem item={item} />
             </div>
           ))}
         </div>
-      </div>
-      <div className="hidden lg:(flex gap-6 animate-marquee whitespace-nowrap)">
-        {data.items.map(item => (
-          <TickerItem key={item.id} item={item} />
-        ))}
       </div>
     </div>
   )

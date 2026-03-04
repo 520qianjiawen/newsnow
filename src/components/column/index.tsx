@@ -1,5 +1,6 @@
 import type { FixedColumnID } from "@shared/types"
 import { Helmet } from "react-helmet-async"
+import { Ticker } from "../header/ticker"
 import { NavBar } from "../navbar"
 import { Dnd } from "./dnd"
 import { currentColumnIDAtom } from "~/atoms"
@@ -39,6 +40,14 @@ export function Column({ id }: { id: FixedColumnID }) {
       {/* 这是一个为 SEO 准备的视觉隐藏的 H1 标签 */}
       <h1 className="sr-only">{pageTitle}</h1>
 
+      <div className="md:hidden mb-3 flex flex-col gap-2 px-2">
+        <div className="rounded-[10px] bg-primary/3 px-2 py-1">
+          <Ticker sourceId="finance-indices" />
+        </div>
+        <div className="rounded-[10px] bg-primary/3 px-2 py-1">
+          <Ticker sourceId="finance-forex" />
+        </div>
+      </div>
       <div className="flex justify-center md:hidden mb-6">
         <NavBar />
       </div>
