@@ -549,6 +549,13 @@
     "color": "blue",
     "interval": 600000
   },
+  "coinmarketcap": {
+    "name": "CoinMarketCap",
+    "column": "coingecko",
+    "home": "https://coinmarketcap.com/",
+    "color": "blue",
+    "interval": 600000
+  },
   "reuters": {
     "name": "Reuters",
     "column": "world",

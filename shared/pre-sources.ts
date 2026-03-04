@@ -473,6 +473,12 @@ export const originSources = {
     color: "blue",
     home: "https://www.panewslab.com",
   },
+  "coinmarketcap": {
+    name: "CoinMarketCap",
+    column: "coingecko",
+    color: "blue",
+    home: "https://coinmarketcap.com/",
+  },
   "reuters": {
     name: "Reuters",
     column: "world",
