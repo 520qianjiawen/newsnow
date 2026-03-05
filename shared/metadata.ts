@@ -34,7 +34,7 @@ export const columns = {
 
 export const fixedColumnIds = ["focus", "hottest", "realtime", "tech", "news", "world", "finance", "coingecko"] as const satisfies Partial<ColumnID>[]
 export const hiddenColumns = Object.keys(columns).filter(id => !fixedColumnIds.includes(id as any)) as HiddenColumnID[]
-const financePreferredIds: SourceID[] = ["xueqiu-hotstock", "jin10"]
+const financePreferredIds: SourceID[] = ["finance-indices", "xueqiu-hotstock", "finance-forex", "finance-commodities", "jin10"]
 const financeAnchorId: SourceID = "gelonghui"
 const financeAfterAnchorIds: SourceID[] = ["mktnews-flash", "mktnews"]
 const clsPrefix = "cls-"
