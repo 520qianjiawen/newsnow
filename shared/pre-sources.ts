@@ -40,6 +40,12 @@ export const originSources = {
     interval: Time.Realtime,
     home: "https://weibo.com",
   },
+  "gnews": {
+    name: "GNews",
+    column: "world",
+    color: "blue",
+    home: "https://gnews.io/",
+  },
   "zaobao": {
     name: "联合早报",
     interval: Time.Common,

@@ -33,6 +33,13 @@
     "color": "red",
     "interval": 120000
   },
+  "gnews": {
+    "name": "GNews",
+    "column": "world",
+    "home": "https://gnews.io/",
+    "color": "blue",
+    "interval": 600000
+  },
   "zaobao": {
     "name": "联合早报",
     "type": "realtime",
