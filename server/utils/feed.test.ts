@@ -35,18 +35,18 @@ describe("getNewsItemTimestamp", () => {
 
 describe("feed xml helpers", () => {
   it("resolves relative links against the current origin", () => {
-    expect(toAbsoluteUrl("/feed.xml", "https://news.asg.li")).toBe("https://news.asg.li/feed.xml")
+    expect(toAbsoluteUrl("/feed.xml", "https://news.neutemu.com/")).toBe("https://news.neutemu.com/feed.xml")
   })
 
   it("escapes xml-sensitive fields in the generated feed", () => {
     const xml = buildFeedXml({
       title: "News & Now",
       description: "Latest <stories>",
-      siteUrl: "https://news.asg.li",
-      feedUrl: "https://news.asg.li/feed.xml",
+      siteUrl: "https://news.neutemu.com/",
+      feedUrl: "https://news.neutemu.com/feed.xml",
       items: [{
         title: "Item <1>",
-        link: "https://news.asg.li/story?a=1&b=2",
+        link: "https://news.neutemu.com/story?a=1&b=2",
         guid: "guid&1",
         description: "Source \"Alpha\"",
         pubDate: Date.parse("2026-03-12T10:00:00Z"),

@@ -21,8 +21,8 @@ export function Column({ id }: { id: FixedColumnID }) {
     : `为您精选最新的${metadata[id].name}热点新闻、实时热搜与行业动态，快速掌握${metadata[id].name}资讯。`
 
   const canonicalUrl = (id === "hottest" || id === "focus")
-    ? "https://news.asg.li/"
-    : `https://news.asg.li/c/${id}`
+    ? "https://news.neutemu.com/"
+    : `https://news.neutemu.com/c/${id}`
 
   return (
     <>

@@ -4,7 +4,7 @@ export function Footer() {
 
   return (
     <span>
-      <a href="https://news.asg.li" target="_blank" className="hover:underline">
+      <a href="https://news.neutemu.com/" target="_blank" className="hover:underline">
         新闻与实时热搜
       </a>
       <span>
