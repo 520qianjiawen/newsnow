@@ -13,6 +13,7 @@ import { useSortable } from "../common/dnd/useSortable"
 import { OverlayScrollbar } from "../common/overlay-scrollbar"
 import type { ItemsProps } from "./card"
 import { CardWrapper } from "./card"
+import { getCardTheme } from "./card-theme"
 // Removed AdSense import as ads are no longer inserted between cards.
 import { currentSourcesAtom } from "~/atoms"
 
@@ -49,7 +50,7 @@ export function Dnd() {
             },
           }}
         >
-          {items.map(id => (
+          {items.map((id, index) => (
             <motion.li
               key={id}
               className={sources[id].cardSpan === 2 ? "md:col-span-2" : undefined}
@@ -68,7 +69,7 @@ export function Dnd() {
                 },
               }}
             >
-              <SortableCardWrapper id={id} />
+              <SortableCardWrapper id={id} index={index} />
             </motion.li>
           ))}
         </motion.ol>
@@ -118,18 +119,19 @@ function DndWrapper({ items, setItems, children }: PropsWithChildren<{
   )
 }
 
-function CardOverlay({ id }: { id: SourceID }) {
+function CardOverlay({ id, index }: { id: SourceID, index: number }) {
   return (
-    <div className={$(
-      "flex flex-col p-4 backdrop-blur-5",
-      `bg-${sources[id].color}-500 dark:bg-${sources[id].color} bg-op-40!`,
-      !isiOS() && "rounded-2xl",
-    )}
+    <div
+      className={$(
+        "news-card flex flex-col p-4 backdrop-blur-5",
+        !isiOS() && "rounded-2xl",
+      )}
+      style={getCardTheme(sources[id].color, index)}
     >
       <div className={$("flex justify-between mx-2 items-center")}>
         <div className="flex gap-2 items-center">
           <div
-            className={$("w-8 h-8 rounded-full bg-cover")}
+            className={$("news-card__brand w-8 h-8 rounded-full bg-cover")}
             style={{
               backgroundImage: `url(/icons/${id.split("-")[0]}.png)`,
             }}
@@ -139,15 +141,19 @@ function CardOverlay({ id }: { id: SourceID }) {
               <span className="text-xl font-bold">
                 {sources[id].name}
               </span>
-              {sources[id]?.title && <span className={$("text-sm", `color-${sources[id].color} bg-base op-80 bg-op-50! px-1 rounded`)}>{sources[id].title}</span>}
+              {sources[id]?.title && (
+                <span className="news-card__badge text-sm px-2 py-0.5 rounded-md">
+                  {sources[id].title}
+                </span>
+              )}
             </span>
             <span className="text-xs op-70">拖拽中</span>
           </span>
         </div>
-        <div className={$("flex gap-2 text-lg", `color-${sources[id].color}`)}>
+        <div className="news-card__toolbar flex gap-2 text-lg">
           <button
             type="button"
-            className={$("i-ph:dots-six-vertical-duotone", "cursor-grabbing")}
+            className={$("news-card__tool i-ph:dots-six-vertical-duotone", "cursor-grabbing")}
           />
         </div>
       </div>
@@ -155,7 +161,7 @@ function CardOverlay({ id }: { id: SourceID }) {
   )
 }
 
-function SortableCardWrapper({ id }: ItemsProps) {
+function SortableCardWrapper({ id, index }: ItemsProps) {
   const {
     isDragging,
     setNodeRef,
@@ -174,10 +180,11 @@ function SortableCardWrapper({ id }: ItemsProps) {
       <CardWrapper
         ref={setNodeRef}
         id={id}
+        index={index}
         isDragging={isDragging}
         setHandleRef={setHandleRef}
       />
-      {OverlayContainer && createPortal(<CardOverlay id={id} />, OverlayContainer)}
+      {OverlayContainer && createPortal(<CardOverlay id={id} index={index} />, OverlayContainer)}
     </>
   )
 }
