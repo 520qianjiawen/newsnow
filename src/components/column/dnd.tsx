@@ -128,7 +128,7 @@ function CardOverlay({ id, index }: { id: SourceID, index: number }) {
       )}
       style={getCardTheme(sources[id].color, index)}
     >
-      <div className={$("flex justify-between mx-2 items-center")}>
+      <div className={$("news-card__header flex justify-between mx-2 items-center")}>
         <div className="flex gap-2 items-center">
           <div
             className={$("news-card__brand w-8 h-8 rounded-full bg-cover")}

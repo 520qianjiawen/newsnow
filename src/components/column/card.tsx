@@ -107,7 +107,7 @@ function NewsCard({ id, setHandleRef }: NewsCardProps) {
 
   return (
     <>
-      <div className={$("flex justify-between mx-2 mt-0 mb-2 items-center")}>
+      <div className={$("news-card__header flex justify-between mx-2 mt-0 mb-3 items-center")}>
         <div className="flex gap-2 items-center">
           <a
             className={$("news-card__brand w-8 h-8 rounded-full bg-cover")}
