@@ -4,17 +4,17 @@ import type { Color } from "@shared/types"
 type CardVars = CSSProperties & Record<`--${string}`, string>
 
 const accentRGBByColor: Record<Color, string> = {
-  primary: "239 68 68",
-  red: "239 68 68",
-  blue: "59 130 246",
-  green: "34 197 94",
-  indigo: "99 102 241",
-  gray: "107 114 128",
-  orange: "249 115 22",
-  slate: "100 116 139",
-  teal: "20 184 166",
-  emerald: "16 185 129",
-  yellow: "234 179 8",
+  primary: "239, 68, 68",
+  red: "239, 68, 68",
+  blue: "59, 130, 246",
+  green: "34, 197, 94",
+  indigo: "99, 102, 241",
+  gray: "107, 114, 128",
+  orange: "249, 115, 22",
+  slate: "100, 116, 139",
+  teal: "20, 184, 166",
+  emerald: "16, 185, 129",
+  yellow: "234, 179, 8",
 }
 
 const variants = [
