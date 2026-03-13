@@ -1,7 +1,6 @@
 import type { NewsItem, SourceID, SourceResponse } from "@shared/types"
 import { useQuery } from "@tanstack/react-query"
 import { AnimatePresence, motion, useInView } from "framer-motion"
-import { useWindowSize } from "react-use"
 import { forwardRef, useImperativeHandle } from "react"
 import { OverlayScrollbar } from "../common/overlay-scrollbar"
 import { getCardTheme } from "./card-theme"
@@ -227,12 +226,11 @@ function NewsUpdatedTime({ date }: { date: string | number }) {
   return <>{relativeTime}</>
 }
 function NewsListHot({ items }: { items: NewsItem[] }) {
-  const { width } = useWindowSize()
   return (
     <ol className="flex flex-col gap-2">
       {items?.map((item, i) => (
         <a
-          href={width < 768 ? item.mobileUrl || item.url : item.url}
+          href={item.url}
           target="_blank"
           key={item.id}
           title={item.extra?.hover}
@@ -260,7 +258,6 @@ function NewsListHot({ items }: { items: NewsItem[] }) {
 }
 
 function NewsListTimeLine({ items }: { items: NewsItem[] }) {
-  const { width } = useWindowSize()
   return (
     <ol className="news-card__timeline border-s flex flex-col ml-1">
       {items?.map(item => (
@@ -279,7 +276,7 @@ function NewsListTimeLine({ items }: { items: NewsItem[] }) {
               "news-card__item ml-2 px-1 rounded-md visited:(text-neutral-400/80)",
               "cursor-pointer [&_*]:cursor-pointer transition-all",
             )}
-            href={width < 768 ? item.mobileUrl || item.url : item.url}
+            href={item.url}
             title={item.extra?.hover}
             target="_blank"
             rel="noopener noreferrer"
