@@ -18,6 +18,10 @@ const defaultScrollbarParams: UseOverlayScrollbarsParams = {
 
 export function OverlayScrollbar({ disabled, children, options, events, defer, className, ...props }: PropsWithChildren<Props>) {
   const ref = useRef<HTMLDivElement>(null)
+  const disableOverlayScrollbars = useMemo(() => {
+    if (disabled || typeof window === "undefined") return !!disabled
+    return window.matchMedia("(pointer: coarse), (prefers-reduced-motion: reduce)").matches
+  }, [disabled])
   const scrollbarParams = useMemo(() => defu<UseOverlayScrollbarsParams, Array<UseOverlayScrollbarsParams> >({
     options,
     events,
@@ -27,7 +31,7 @@ export function OverlayScrollbar({ disabled, children, options, events, defer, c
   const [initialize, instance] = useOverlayScrollbars(scrollbarParams)
 
   useMount(() => {
-    if (!disabled) {
+    if (!disableOverlayScrollbars) {
       initialize({
         target: ref.current!,
         cancel: {
@@ -40,10 +44,10 @@ export function OverlayScrollbar({ disabled, children, options, events, defer, c
 
   useEffect(() => {
     if (ref.current) {
-      if (instance && instance?.state().destroyed) {
-        ref.current.classList.remove("scrollbar-hidden")
-      } else {
+      if (instance && !instance.state().destroyed) {
         ref.current.classList.add("scrollbar-hidden")
+      } else {
+        ref.current.classList.remove("scrollbar-hidden")
       }
     }
   }, [instance])
@@ -58,49 +62,73 @@ export function OverlayScrollbar({ disabled, children, options, events, defer, c
 
 export function GlobalOverlayScrollbar({ children, className, ...props }: PropsWithChildren<HTMLProps<HTMLDivElement>>) {
   const ref = useRef<HTMLDivElement>(null)
-  const lastTrigger = useRef(0)
-  const timer = useRef<any>(null)
+  const isTicking = useRef(false)
+  const scrollTopRef = useRef(0)
+  const lastOkRef = useRef(false)
+  const frameRef = useRef<number | null>(null)
+  const disableOverlayScrollbars = useMemo(() => {
+    if (typeof window === "undefined") return false
+    return window.matchMedia("(pointer: coarse), (prefers-reduced-motion: reduce)").matches
+  }, [])
   const setGoToTop = useSetAtom(goToTopAtom)
   const onScroll = useCallback((e: Event) => {
-    const now = Date.now()
-    if (now - lastTrigger.current > 50) {
-      lastTrigger.current = now
-      clearTimeout(timer.current)
-      timer.current = setTimeout(
-        () => {
-          const el = e.target as HTMLElement
-          setGoToTop({
-            ok: el.scrollTop > 100,
-            el,
-            fn: () => el.scrollTo({ top: 0, behavior: "smooth" }),
-          })
-        },
-        500,
-      )
-    }
+    const el = e.target as HTMLElement
+    scrollTopRef.current = el.scrollTop
+    if (isTicking.current) return
+    isTicking.current = true
+    frameRef.current = window.requestAnimationFrame(() => {
+      isTicking.current = false
+      const ok = scrollTopRef.current > 100
+      if (ok !== lastOkRef.current) {
+        lastOkRef.current = ok
+        setGoToTop({
+          ok,
+          el,
+          fn: () => el.scrollTo({ top: 0, behavior: "smooth" }),
+        })
+      }
+    })
   }, [setGoToTop])
+
+  useEffect(() => {
+    return () => {
+      if (frameRef.current !== null) {
+        window.cancelAnimationFrame(frameRef.current)
+        frameRef.current = null
+      }
+    }
+  }, [])
+
   const [initialize, instance] = useOverlayScrollbars({
     options: {
       scrollbars: {
         autoHide: "scroll",
       },
     },
-    events: {
-      scroll: (_, e) => onScroll(e),
-    },
     defer: true,
   })
 
   useMount(() => {
-    initialize({
-      target: ref.current!,
-      cancel: {
-        nativeScrollbarsOverlaid: true,
-      },
-    })
     const el = ref.current
     if (el) {
-      ref.current?.addEventListener("scroll", onScroll)
+      const ok = el.scrollTop > 100
+      lastOkRef.current = ok
+      setGoToTop({
+        ok,
+        el,
+        fn: () => el.scrollTo({ top: 0, behavior: "smooth" }),
+      })
+    }
+    if (el && !disableOverlayScrollbars) {
+      initialize({
+        target: el,
+        cancel: {
+          nativeScrollbarsOverlaid: true,
+        },
+      })
+    }
+    if (el) {
+      ref.current?.addEventListener("scroll", onScroll, { passive: true })
       return () => {
         el?.removeEventListener("scroll", onScroll)
       }
@@ -109,10 +137,10 @@ export function GlobalOverlayScrollbar({ children, className, ...props }: PropsW
 
   useEffect(() => {
     if (ref.current) {
-      if (instance && instance?.state().destroyed) {
-        ref.current.classList.remove("scrollbar-hidden")
-      } else {
+      if (instance && !instance.state().destroyed) {
         ref.current?.classList.add("scrollbar-hidden")
+      } else {
+        ref.current.classList.remove("scrollbar-hidden")
       }
     }
   }, [instance])
