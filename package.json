@@ -107,7 +107,7 @@
   },
   "pnpm": {
     "overrides": {
-      "vite-plugin-with-nitro>h3": "1.15.3"
+      "vite-plugin-with-nitro>h3": "1.15.1"
     },
     "patchedDependencies": {
       "dayjs": "patches/dayjs.patch"
