@@ -62,18 +62,17 @@ button:disabled {
   overflow: hidden;
   isolation: isolate;
   border: 1px solid rgba(var(--card-accent), var(--card-border-alpha, 0.22));
-  background-color: rgba(9, 13, 22, 0.82);
+  background-color: rgba(9, 13, 22, 0.92);
   background-image:
-    radial-gradient(circle at var(--card-glow-x, 16%) var(--card-glow-y, 12%), rgba(255, 255, 255, 0.05), transparent 30%),
-    radial-gradient(circle at var(--card-bloom-x, 84%) var(--card-bloom-y, 82%), rgba(var(--card-accent), 0.18), transparent 40%),
-    linear-gradient(var(--card-angle, 150deg), rgba(var(--card-accent), 0.16), rgba(12, 16, 26, 0.92) 30%, rgba(6, 9, 16, 0.97) 74%);
+    radial-gradient(circle at var(--card-bloom-x, 84%) var(--card-bloom-y, 82%), rgba(var(--card-accent), 0.14), transparent 50%),
+    linear-gradient(var(--card-angle, 150deg), rgba(var(--card-accent), 0.12), rgba(12, 16, 26, 0.94) 35%, rgba(6, 9, 16, 0.98) 80%);
   -webkit-backdrop-filter: blur(14px) saturate(120%);
   backdrop-filter: blur(14px) saturate(120%);
   box-shadow:
-    0 22px 48px rgba(0, 0, 0, 0.40),
-    0 10px 24px rgba(var(--card-accent), 0.08),
-    inset 0 1px 0 rgba(255, 255, 255, 0.05),
-    0 0 0 1px rgba(var(--card-accent), 0.12);
+    0 18px 40px rgba(0, 0, 0, 0.36),
+    0 8px 20px rgba(var(--card-accent), 0.06),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04),
+    0 0 0 1px rgba(var(--card-accent), 0.1);
 }
 
 .news-card::before {
@@ -82,10 +81,9 @@ button:disabled {
   inset: 0;
   pointer-events: none;
   background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.08), transparent 18%),
-    linear-gradient(120deg, transparent 35%, rgba(255, 255, 255, 0.06) 50%, transparent 66%),
-    radial-gradient(circle at 50% 0%, rgba(var(--card-accent), 0.12), transparent 40%);
-  opacity: 0.78;
+    linear-gradient(180deg, rgba(255, 255, 255, 0.06), transparent 20%),
+    radial-gradient(circle at 50% 0%, rgba(var(--card-accent), 0.08), transparent 50%);
+  opacity: 0.65;
 }
 
 .news-card::after {
@@ -105,27 +103,23 @@ button:disabled {
   padding: 0.65rem 0.8rem;
   border: 1px solid rgba(var(--card-accent), 0.22);
   border-radius: 18px;
-  background:
-    linear-gradient(135deg, rgba(var(--card-accent), 0.08), rgba(var(--card-accent), 0.04) 62%, rgba(255, 255, 255, 0.008));
+  background: linear-gradient(135deg, rgba(var(--card-accent), 0.08), rgba(var(--card-accent), 0.03) 70%);
   -webkit-backdrop-filter: blur(10px) saturate(112%);
   backdrop-filter: blur(10px) saturate(112%);
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.025),
-    0 6px 14px rgba(var(--card-accent), 0.04);
+    inset 0 1px 0 rgba(255, 255, 255, 0.02),
+    0 5px 12px rgba(var(--card-accent), 0.03);
 }
 
 .news-card__panel {
   border: 1px solid rgba(255, 255, 255, 0.05);
-  background-color: rgba(7, 10, 18, 0.46);
-  background-image:
-    radial-gradient(circle at 50% -10%, rgba(var(--card-accent), 0.14), transparent 46%),
-    linear-gradient(180deg, rgba(var(--card-accent), 0.06), rgba(10, 14, 24, 0.78) 24%, rgba(6, 9, 16, 0.92)));
-  -webkit-backdrop-filter: blur(18px) saturate(118%);
-  backdrop-filter: blur(18px) saturate(118%);
+  background-color: rgba(7, 10, 18, 0.52);
+  background-image: linear-gradient(180deg, rgba(var(--card-accent), 0.05), rgba(10, 14, 24, 0.82) 30%);
+  -webkit-backdrop-filter: blur(16px) saturate(115%);
+  backdrop-filter: blur(16px) saturate(115%);
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.04),
-    inset 0 -1px 0 rgba(255, 255, 255, 0.02),
-    0 12px 32px rgba(0, 0, 0, 0.16);
+    inset 0 1px 0 rgba(255, 255, 255, 0.03),
+    0 10px 28px rgba(0, 0, 0, 0.14);
 }
 
 .news-card__brand {
@@ -217,4 +211,120 @@ button:disabled {
       inset 0 1px 0 rgba(255, 255, 255, 0.03),
       0 6px 18px rgba(0, 0, 0, 0.14);
   }
+}
+
+/* GPU加速与性能优化 */
+.news-card,
+.news-card__header,
+.news-card__panel {
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+  will-change: transform;
+  contain: layout style;
+}
+
+/* 滚动时动态降级效果 */
+.scrolling .news-card,
+.scrolling .news-card__header,
+.scrolling .news-card__panel,
+.scrolling .news-card__badge,
+.scrolling .news-card__tool,
+.scrolling .news-card__rank {
+  -webkit-backdrop-filter: blur(4px) saturate(100%) !important;
+  backdrop-filter: blur(4px) saturate(100%) !important;
+  transition: backdrop-filter 0.15s ease;
+}
+
+.scrolling--stopped .news-card,
+.scrolling--stopped .news-card__header,
+.scrolling--stopped .news-card__panel {
+  -webkit-backdrop-filter: blur(14px) saturate(120%);
+  backdrop-filter: blur(14px) saturate(120%);
+  transition: backdrop-filter 0.3s ease;
+}
+
+/* 移动端特别优化 */
+@media (max-width: 768px) {
+  html {
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .news-card {
+    transform: translateZ(0);
+    background-image: linear-gradient(
+      var(--card-angle, 150deg),
+      rgba(var(--card-accent), 0.12),
+      rgba(9, 13, 22, 0.95) 40%
+    );
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.22), 0 0 0 1px rgba(var(--card-accent), 0.1);
+  }
+
+  .news-card::before,
+  .news-card::after {
+    opacity: 0.4;
+  }
+}
+
+/* 性能检测与回退 */
+@supports not (backdrop-filter: blur(1px)) {
+  .news-card {
+    background-color: rgba(9, 13, 22, 0.97);
+    background-image: linear-gradient(
+      var(--card-angle, 150deg),
+      rgba(var(--card-accent), 0.16),
+      rgba(12, 16, 26, 0.95) 40%
+    );
+  }
+
+  .news-card__header,
+  .news-card__panel {
+    background-color: rgba(7, 10, 18, 0.92);
+  }
+}
+
+/* 滚动性能优化 */
+.scroll-container {
+  transform: translateZ(0);
+  contain: layout;
+}
+
+/* 优化过渡性能 */
+.news-card__item,
+.news-card__tool {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  transform: translateZ(0);
+}
+
+/* 减少动画对滚动的影响 */
+@media (prefers-reduced-motion: reduce) {
+  .news-card__item,
+  .news-card__tool,
+  .news-card__rank {
+    transition: none;
+  }
+}
+
+/* 滚动容器GPU加速 */
+.scrollbar-hidden {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  contain: layout;
+  will-change: transform;
+}
+
+/* 优化滚动条渲染 */
+.os-scrollbar {
+  transform: translateZ(0);
+}
+
+/* 提升卡片内滚动性能 */
+.news-card__panel {
+  transform-style: preserve-3d;
+}
+
+/* 减少重绘区域 */
+.news-card__item,
+.news-card__tool {
+  contain: content;
 }
