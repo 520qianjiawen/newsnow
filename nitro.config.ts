@@ -30,6 +30,7 @@ const nitroOption: Parameters<typeof viteNitro>[0] = {
     "@shared": join(projectDir, "shared"),
     "#": join(projectDir, "server"),
   },
+  root: projectDir,
 }
 
 if (process.env.VERCEL) {
