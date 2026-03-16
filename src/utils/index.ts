@@ -1,5 +1,8 @@
 import type { MaybePromise } from "@shared/type.util"
 import { $fetch } from "ofetch"
+import { clsx } from "clsx"
+
+export { clsx as $ }
 
 export function safeParseString(str: any) {
   try {

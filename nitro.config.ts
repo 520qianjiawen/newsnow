@@ -37,9 +37,6 @@ if (process.env.VERCEL) {
   nitroOption.preset = "vercel-edge"
   // You can use other online database, do it yourself. For more info: https://db0.unjs.io/connectors
   nitroOption.database = undefined
-  nitroOption.build = {
-    static: true,
-  }
   // nitroOption.vercel = {
   //   config: {
   //     cache: []
