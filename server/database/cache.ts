@@ -41,8 +41,8 @@ export class Cache {
   }
 
   async getEntire(keys: string[]): Promise<CacheInfo[]> {
-    const keysStr = keys.map(k => `id = '${k}'`).join(" or ")
-    const res = await this.db.prepare(`SELECT id, data, updated FROM cache WHERE ${keysStr}`).all() as any
+    const placeholders = keys.map(() => "?").join(",")
+    const res = await this.db.prepare(`SELECT id, data, updated FROM cache WHERE id IN (${placeholders})`).all(...keys) as any
     const rows = (res.results ?? res) as CacheRow[]
 
     /**

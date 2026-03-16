@@ -1,3 +1,4 @@
+import React, { Suspense } from "react"
 import "~/styles/globals.css"
 import "virtual:uno.css"
 import { Outlet, createRootRouteWithContext } from "@tanstack/react-router"
@@ -7,9 +8,10 @@ import type { QueryClient } from "@tanstack/react-query"
 import { isMobile } from "react-device-detect"
 import { Header } from "~/components/header"
 import { GlobalOverlayScrollbar } from "~/components/common/overlay-scrollbar"
-import { Footer } from "~/components/footer"
-import { Toast } from "~/components/common/toast"
-import { SearchBar } from "~/components/common/search-bar"
+
+const Footer = React.lazy(() => import("~/components/footer").then(mod => ({ default: mod.Footer })))
+const Toast = React.lazy(() => import("~/components/common/toast").then(mod => ({ default: mod.Toast })))
+const SearchBar = React.lazy(() => import("~/components/common/search-bar").then(mod => ({ default: mod.SearchBar })))
 // Note: we previously imported AdSense to insert explicit ad slots. Since we now rely on Google Auto Ads to place ads automatically, the AdSense component is unused and thus removed.
 
 export const Route = createRootRouteWithContext<{
@@ -70,11 +72,15 @@ function RootComponent() {
           <Outlet />
         </main>
         <footer className="py-6 flex flex-col items-center justify-center text-sm text-neutral-500 font-mono">
-          <Footer />
+          <Suspense fallback={null}>
+            <Footer />
+          </Suspense>
         </footer>
       </GlobalOverlayScrollbar>
-      <Toast />
-      <SearchBar />
+      <Suspense fallback={null}>
+        <Toast />
+        <SearchBar />
+      </Suspense>
       {import.meta.env.DEV && (
         <>
           <ReactQueryDevtools buttonPosition="bottom-left" />

@@ -74,15 +74,19 @@ export function GlobalOverlayScrollbar({ children, className, ...props }: PropsW
     return window.matchMedia("(pointer: coarse), (prefers-reduced-motion: reduce)").matches
   }, [])
   const setGoToTop = useSetAtom(goToTopAtom)
-  const scrollStateTimerRef = useRef<NodeJS.Timeout>()
+  const scrollStateTimerRef = useRef<NodeJS.Timeout>(undefined)
 
+  const isScrollingRef = useRef(false)
   const onScroll = useCallback((e: Event) => {
     const el = e.target as HTMLElement
     scrollTopRef.current = el.scrollTop
 
     // 滚动性能优化：滚动时降低视觉效果复杂度
-    if (!document.body.classList.contains("scrolling")) {
-      document.body.classList.add("scrolling")
+    if (!isScrollingRef.current) {
+      isScrollingRef.current = true
+      if (!document.body.classList.contains("scrolling")) {
+        document.body.classList.add("scrolling")
+      }
       document.body.classList.remove("scrolling--stopped")
     }
 
@@ -93,13 +97,20 @@ export function GlobalOverlayScrollbar({ children, className, ...props }: PropsW
 
     // 设置滚动停止检测计时器
     scrollStateTimerRef.current = setTimeout(() => {
-      document.body.classList.remove("scrolling")
-      document.body.classList.add("scrolling--stopped")
+      if (isScrollingRef.current) {
+        isScrollingRef.current = false
+        document.body.classList.remove("scrolling")
+        if (!document.body.classList.contains("scrolling--stopped")) {
+          document.body.classList.add("scrolling--stopped")
+        }
 
-      // 短暂延迟后移除 stopping 状态
-      setTimeout(() => {
-        document.body.classList.remove("scrolling--stopped")
-      }, 300)
+        // 短待延迟后移除 stopping 状态
+        setTimeout(() => {
+          if (!isScrollingRef.current) {
+            document.body.classList.remove("scrolling--stopped")
+          }
+        }, 300)
+      }
     }, 150)
 
     if (isTicking.current) return

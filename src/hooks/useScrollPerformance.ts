@@ -9,8 +9,8 @@ const SCROLL_STOP_DELAY = 150
  */
 export function useScrollPerformance(elementRef?: React.RefObject<HTMLElement>) {
   const isScrollingRef = useRef(false)
-  const scrollTimerRef = useRef<NodeJS.Timeout>()
-  const rafRef = useRef<number>()
+  const scrollTimerRef = useRef<NodeJS.Timeout>(undefined)
+  const rafRef = useRef<number>(undefined)
   const lastScrollTopRef = useRef(0)
 
   useEffect(() => {
@@ -30,7 +30,9 @@ export function useScrollPerformance(elementRef?: React.RefObject<HTMLElement>) 
         // 只有滚动量较大时才触发状态变化
         if (delta > 2 && !isScrollingRef.current) {
           isScrollingRef.current = true
-          document.body.classList.add("scrolling")
+          if (!document.body.classList.contains("scrolling")) {
+            document.body.classList.add("scrolling")
+          }
           document.body.classList.remove("scrolling--stopped")
         }
 
@@ -44,11 +46,15 @@ export function useScrollPerformance(elementRef?: React.RefObject<HTMLElement>) 
           if (isScrollingRef.current) {
             isScrollingRef.current = false
             document.body.classList.remove("scrolling")
-            document.body.classList.add("scrolling--stopped")
+            if (!document.body.classList.contains("scrolling--stopped")) {
+              document.body.classList.add("scrolling--stopped")
+            }
 
             // 短暂延迟后移除 stopping 状态
             setTimeout(() => {
-              document.body.classList.remove("scrolling--stopped")
+              if (!isScrollingRef.current) {
+                document.body.classList.remove("scrolling--stopped")
+              }
             }, 300)
           }
         }, SCROLL_STOP_DELAY)

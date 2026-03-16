@@ -12,6 +12,7 @@ body,
 @font-face {
   font-family: 'Baloo 2';
   src: url("/Baloo2-Bold.subset.ttf");
+  font-display: swap;
 }
 
 

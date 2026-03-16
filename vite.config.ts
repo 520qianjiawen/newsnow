@@ -23,7 +23,7 @@ export default defineConfig({
   plugins: [
     TanStackRouterVite({
       // error with auto import and vite-plugin-pwa
-      // autoCodeSplitting: true,
+      autoCodeSplitting: true,
     }),
     unimport.vite({
       dirs: ["src/hooks", "shared", "src/utils", "src/atoms"],

@@ -27,6 +27,7 @@ export default defineConfig({
       {
         "font-family": `"Baloo 2", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
     "Liberation Mono", "Courier New", monospace; `,
+        "font-display": "swap",
       },
     ],
   ],
@@ -36,10 +37,17 @@ export default defineConfig({
     "btn": "op50 hover:op85 cursor-pointer transition-all",
   },
   safelist: [
-    ...["orange", ...new Set(Object.values(sources).map(k => k.color))].map(k =>
-      `bg-${k} color-${k} border-${k} sprinkle-${k} shadow-${k}
-       bg-${k}-500 color-${k}-500
-       dark:bg-${k} dark:color-${k}`.trim().split(/\s+/)).flat(),
+    ...["orange", ...new Set(Object.values(sources).map(k => k.color))].flatMap(k => [
+      `bg-${k}`,
+      `color-${k}`,
+      `border-${k}`,
+      `sprinkle-${k}`,
+      `shadow-${k}`,
+      `bg-${k}-500`,
+      `color-${k}-500`,
+      `dark:bg-${k}`,
+      `dark:color-${k}`,
+    ]),
   ],
   extendTheme: (theme) => {
     // @ts-expect-error >_<
