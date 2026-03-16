@@ -1,9 +1,12 @@
 import type { HTMLProps, PropsWithChildren } from "react"
+import { useCallback, useEffect, useMemo, useRef } from "react"
 import { defu } from "defu"
 import { useMount } from "react-use"
+import { useSetAtom } from "jotai"
 import { useOverlayScrollbars } from "./useOverlayScrollbars"
 import type { UseOverlayScrollbarsParams } from "./useOverlayScrollbars"
 import { goToTopAtom } from "~/atoms"
+import { $ } from "~/utils"
 import "./style.css"
 
 type Props = HTMLProps<HTMLDivElement> & UseOverlayScrollbarsParams
