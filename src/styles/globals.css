@@ -13,6 +13,21 @@ body,
   font-family: 'Baloo 2';
   src: url("/Baloo2-Bold.subset.ttf");
   font-display: swap;
+  /* Font metric overrides to mitigate CLS */
+  ascent-override: 95%;
+  descent-override: 25%;
+  line-gap-override: 0%;
+  size-adjust: 100%;
+}
+
+/* Fallback font to match Baloo 2 metrics */
+@font-face {
+  font-family: 'Baloo 2 Fallback';
+  src: local('Arial');
+  ascent-override: 95%;
+  descent-override: 25%;
+  line-gap-override: 0%;
+  size-adjust: 100%;
 }
 
 

@@ -4,7 +4,7 @@ import { AnimatePresence, motion, useInView } from "framer-motion"
 import { forwardRef, useImperativeHandle } from "react"
 import { OverlayScrollbar } from "../common/overlay-scrollbar"
 import { getCardTheme } from "./card-theme"
-import { safeParseString } from "~/utils"
+import { safeParseString, toAppUrl } from "~/utils"
 
 export interface ItemsProps extends React.HTMLAttributes<HTMLDivElement> {
   id: SourceID
@@ -162,7 +162,7 @@ function NewsCard({ id, setHandleRef }: NewsCardProps) {
         defer
       >
         <div className={$("transition-opacity-500", isFetching && "op-20")}>
-          {!!data?.items?.length && (sources[id].type === "hottest" ? <NewsListHot items={data.items} /> : <NewsListTimeLine items={data.items} />)}
+          {!!data?.items?.length && (sources[id].type === "hottest" ? <NewsListHot items={data.items} sourceId={id} /> : <NewsListTimeLine items={data.items} sourceId={id} />)}
         </div>
       </OverlayScrollbar>
     </>
@@ -225,12 +225,12 @@ function NewsUpdatedTime({ date }: { date: string | number }) {
   const relativeTime = useRelativeTime(date)
   return <>{relativeTime}</>
 }
-function NewsListHot({ items }: { items: NewsItem[] }) {
+function NewsListHot({ items, sourceId }: { items: NewsItem[], sourceId: SourceID }) {
   return (
     <ol className="flex flex-col gap-2">
       {items?.map((item, i) => (
         <a
-          href={item.url}
+          href={toAppUrl(item.url, sourceId)}
           target="_blank"
           key={item.id}
           title={item.extra?.hover}
@@ -257,7 +257,7 @@ function NewsListHot({ items }: { items: NewsItem[] }) {
   )
 }
 
-function NewsListTimeLine({ items }: { items: NewsItem[] }) {
+function NewsListTimeLine({ items, sourceId }: { items: NewsItem[], sourceId: SourceID }) {
   return (
     <ol className="news-card__timeline border-s flex flex-col ml-1">
       {items?.map(item => (
@@ -276,7 +276,7 @@ function NewsListTimeLine({ items }: { items: NewsItem[] }) {
               "news-card__item ml-2 px-1 rounded-md visited:(text-neutral-400/80)",
               "cursor-pointer [&_*]:cursor-pointer transition-all",
             )}
-            href={item.url}
+            href={toAppUrl(item.url, sourceId)}
             title={item.extra?.hover}
             target="_blank"
             rel="noopener noreferrer"
