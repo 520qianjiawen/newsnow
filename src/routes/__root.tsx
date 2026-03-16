@@ -7,7 +7,6 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools"
 import type { QueryClient } from "@tanstack/react-query"
 import { isMobile } from "react-device-detect"
 import { Header } from "~/components/header"
-import { GlobalOverlayScrollbar } from "~/components/common/overlay-scrollbar"
 
 const Footer = React.lazy(() => import("~/components/footer").then(mod => ({ default: mod.Footer })))
 const Toast = React.lazy(() => import("~/components/common/toast").then(mod => ({ default: mod.Toast })))
@@ -40,10 +39,10 @@ function RootComponent() {
        * the xl breakpoint the sidebars are hidden. These sidebars are left empty so that
        * Google Auto Ads can insert advertisements automatically when enabled.
        */}
-      <GlobalOverlayScrollbar
+      <div
         className={$([
           !isMobile && "px-4",
-          "h-full overflow-x-auto",
+          "h-full overflow-x-hidden overflow-y-auto",
           "md:(px-10)",
           "lg:(px-20)",
         ])}
@@ -76,7 +75,7 @@ function RootComponent() {
             <Footer />
           </Suspense>
         </footer>
-      </GlobalOverlayScrollbar>
+      </div>
       <Suspense fallback={null}>
         <Toast />
         <SearchBar />
