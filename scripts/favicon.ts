@@ -1,4 +1,5 @@
 import fs from "node:fs"
+import process from "node:process"
 
 import { fileURLToPath } from "node:url"
 import { join } from "node:path"
@@ -10,12 +11,14 @@ const projectDir = fileURLToPath(new URL("..", import.meta.url))
 const iconsDir = join(projectDir, "public", "icons")
 async function downloadImage(url: string, outputPath: string, id: string) {
   try {
-    const response = await fetch(url)
+    const response = await fetch(url, {
+      signal: AbortSignal.timeout(15_000),
+    })
     if (!response.ok) {
       throw new Error(`${id}: could not fetch ${url}, status: ${response.status}`)
     }
 
-    const image = await (await fetch(url)).arrayBuffer()
+    const image = await response.arrayBuffer()
     fs.writeFileSync(outputPath, Buffer.from(image))
     consola.success(`${id}: downloaded successfully.`)
   } catch (error) {
@@ -24,6 +27,8 @@ async function downloadImage(url: string, outputPath: string, id: string) {
 }
 
 async function main() {
+  if (process.env.SKIP_FAVICON_DOWNLOAD === "true") return
+
   await Promise.all(
     Object.entries(originSources).map(async ([id, source]) => {
       try {

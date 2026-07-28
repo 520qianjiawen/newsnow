@@ -224,6 +224,19 @@ export const originSources = {
       },
     },
   },
+  "longbridge": {
+    name: "Longbridge",
+    color: "blue",
+    home: "https://longbridge.com/markets",
+    column: "finance",
+    sub: {
+      us: {
+        title: "美股人气榜",
+        interval: Time.Realtime,
+        type: "realtime",
+      },
+    },
+  },
   "gelonghui": {
     name: "格隆汇",
     color: "blue",
@@ -477,6 +490,7 @@ export const originSources = {
     name: "Polymarket",
     column: "coingecko",
     type: "hottest",
+    title: "热门预测",
     color: "blue",
     home: "https://polymarket.com",
   },

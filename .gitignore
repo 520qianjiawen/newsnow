@@ -4,6 +4,7 @@ dist/
 .output
 .vinxi
 .cache
+.firecrawl/
 .data
 .wrangler
 .env

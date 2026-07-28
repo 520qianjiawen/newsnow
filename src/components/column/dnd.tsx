@@ -128,33 +128,33 @@ function CardOverlay({ id, index }: { id: SourceID, index: number }) {
       )}
       style={getCardTheme(sources[id].color, index)}
     >
-      <div className={$("news-card__header flex justify-between mx-2 items-center")}>
-        <div className="flex gap-2 items-center">
-          <div
-            className={$("news-card__brand w-8 h-8 rounded-full bg-cover")}
-            style={{
-              backgroundImage: `url(/icons/${id.split("-")[0]}.png)`,
-            }}
-          />
-          <span className="flex flex-col">
-            <span className="flex items-center gap-2">
-              <span className="text-xl font-bold">
-                {sources[id].name}
-              </span>
-              {sources[id]?.title && (
-                <span className="news-card__badge text-sm px-2 py-0.5 rounded-md">
-                  {sources[id].title}
-                </span>
-              )}
-            </span>
-            <span className="text-xs op-70">拖拽中</span>
+      <div className="news-card__header mx-2">
+        <div
+          className="news-card__brand rounded-full bg-cover"
+          style={{
+            backgroundImage: `url(/icons/${id.split("-")[0]}.png)`,
+          }}
+        />
+        <div className="news-card__meta">
+          <span className="news-card__source text-xl font-bold">
+            {sources[id].name}
           </span>
+          <div className="news-card__subline">
+            <span className="news-card__updated text-xs op-70">拖拽中</span>
+          </div>
         </div>
-        <div className="news-card__toolbar flex gap-2 text-lg">
-          <button
-            type="button"
-            className={$("news-card__tool i-ph:dots-six-vertical-duotone", "cursor-grabbing")}
-          />
+        <div className="news-card__actions">
+          {sources[id]?.title && (
+            <span className="news-card__badge">
+              {sources[id].title}
+            </span>
+          )}
+          <div className="news-card__toolbar flex text-lg">
+            <button
+              type="button"
+              className={$("news-card__tool i-ph:dots-six-vertical-duotone", "cursor-grabbing")}
+            />
+          </div>
         </div>
       </div>
     </div>

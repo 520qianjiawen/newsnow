@@ -6,24 +6,20 @@ export function NavBar() {
   const currentId = useAtomValue(currentColumnIDAtom)
 
   return (
-    <span className={$([
-      "flex p-3 rounded-2xl bg-primary/1 text-sm",
-      "shadow shadow-primary/20 hover:shadow-primary/50 transition-shadow-500",
-    ])}
-    >
+    <nav className="main-navigation" aria-label="新闻分类">
       {fixedColumnIds.map(columnId => (
         <Link
           key={columnId}
           to="/c/$column"
           params={{ column: columnId }}
           className={$(
-            "px-2 hover:(bg-primary/10 rounded-md) cursor-pointer transition-all",
-            currentId === columnId ? "color-primary font-bold" : "op-70 dark:op-90",
+            "main-navigation__link",
+            currentId === columnId && "main-navigation__link--active",
           )}
         >
           {metadata[columnId].name}
         </Link>
       ))}
-    </span>
+    </nav>
   )
 }

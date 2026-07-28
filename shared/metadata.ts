@@ -34,7 +34,8 @@ export const columns = {
 
 export const fixedColumnIds = ["focus", "hottest", "realtime", "tech", "news", "world", "finance", "coingecko"] as const satisfies Partial<ColumnID>[]
 export const hiddenColumns = Object.keys(columns).filter(id => !fixedColumnIds.includes(id as any)) as HiddenColumnID[]
-const financePreferredIds: SourceID[] = ["finance-indices", "xueqiu-hotstock", "finance-forex", "finance-commodities", "jin10"]
+const financePreferredIds: SourceID[] = ["finance-indices", "longbridge-us", "xueqiu-hotstock", "jin10"]
+const financeLastIds: SourceID[] = ["finance-forex", "finance-commodities"]
 const financeAnchorId: SourceID = "gelonghui"
 const financeAfterAnchorIds: SourceID[] = ["mktnews-flash", "mktnews"]
 const clsPrefix = "cls-"
@@ -80,9 +81,10 @@ const hottestPreferredIds: SourceID[] = [
   "github-trending-today",
 ]
 
-function withFinancePreferredFirst(items: SourceID[]) {
+function withFinancePreferredOrder(items: SourceID[]) {
   const preferred = financePreferredIds.filter(id => items.includes(id))
-  let rest = items.filter(id => !preferred.includes(id))
+  const last = financeLastIds.filter(id => items.includes(id))
+  let rest = items.filter(id => !preferred.includes(id) && !last.includes(id))
 
   const hasCls = rest.some(id => id.startsWith(clsPrefix))
   const hasWallstreetcn = rest.some(id => id.startsWith(wallstreetcnPrefix))
@@ -116,7 +118,7 @@ function withFinancePreferredFirst(items: SourceID[]) {
     }
   }
 
-  return [...preferred, ...rest]
+  return [...preferred, ...rest, ...last]
 }
 
 function withTechPreferredOrder(items: SourceID[]) {
@@ -195,7 +197,7 @@ export const metadata: Metadata = typeSafeObjectFromEntries(typeSafeObjectEntrie
     case "finance":
       return [k, {
         name: v.zh,
-        sources: withFinancePreferredFirst(typeSafeObjectEntries(sources).filter(([, v]) => v.column === "finance" && !v.redirect).map(([k]) => k as SourceID)),
+        sources: withFinancePreferredOrder(typeSafeObjectEntries(sources).filter(([, v]) => v.column === "finance" && !v.redirect).map(([k]) => k as SourceID)),
       }]
     case "tech":
       return [k, {

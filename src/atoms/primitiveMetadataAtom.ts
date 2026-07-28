@@ -36,7 +36,8 @@ const initialMetadata = typeSafeObjectFromEntries(typeSafeObjectEntries(metadata
   .filter(([id]) => fixedColumnIds.includes(id as any))
   .map(([id, val]) => [id, val.sources] as [FixedColumnID, SourceID[]]))
 
-const financePreferredIds: SourceID[] = ["xueqiu-hotstock", "jin10"]
+const financePreferredIds: SourceID[] = ["longbridge-us", "xueqiu-hotstock", "jin10"]
+const financeLastIds: SourceID[] = ["finance-forex", "finance-commodities"]
 const financeAnchorId: SourceID = "gelonghui"
 const financeAfterAnchorIds: SourceID[] = ["mktnews-flash", "mktnews"]
 const clsPrefix = "cls-"
@@ -78,9 +79,10 @@ const hottestPreferredIds: SourceID[] = [
   "github-trending-today",
 ]
 
-function withFinancePreferredFirst(items: SourceID[]) {
+function withFinancePreferredOrder(items: SourceID[]) {
   const preferred = financePreferredIds.filter(id => items.includes(id))
-  let rest = items.filter(id => !preferred.includes(id))
+  const last = financeLastIds.filter(id => items.includes(id))
+  let rest = items.filter(id => !preferred.includes(id) && !last.includes(id))
 
   const hasCls = rest.some(id => id.startsWith(clsPrefix))
   const hasWallstreetcn = rest.some(id => id.startsWith(wallstreetcnPrefix))
@@ -114,7 +116,7 @@ function withFinancePreferredFirst(items: SourceID[]) {
     }
   }
 
-  return [...preferred, ...rest]
+  return [...preferred, ...rest, ...last]
 }
 
 function withTechPreferredOrder(items: SourceID[]) {
@@ -178,7 +180,7 @@ export function preprocessMetadata(target: PrimitiveMetadata) {
             const merged = [...oldS, ...newS]
             if (id === "news") return [id, withNewsPreferredOrder(merged)]
             if (id === "hottest") return [id, withHottestPreferredOrder(merged)]
-            if (id === "finance") return [id, withFinancePreferredFirst(merged)]
+            if (id === "finance") return [id, withFinancePreferredOrder(merged)]
             if (id === "tech") return [id, withTechPreferredOrder(merged)]
             return [id, merged]
           }),

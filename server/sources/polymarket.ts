@@ -1,53 +1,53 @@
+import * as cheerio from "cheerio"
+
 interface PolymarketEvent {
   id: string
   title: string
   slug: string
-  markets: {
-    outcomePrices: string // JSON string array
-    volume?: string | number
-  }[]
+  volume24hr?: string | number
+}
+
+const polymarketBaseUrl = "https://polymarket.com"
+
+function formatVolume(value?: string | number) {
+  const volume = Number(value || 0)
+  if (!Number.isFinite(volume)) return ""
+  return new Intl.NumberFormat("zh-CN", {
+    notation: "compact",
+    maximumFractionDigits: 1,
+  }).format(volume)
+}
+
+async function getChineseTitle(event: PolymarketEvent) {
+  try {
+    const html = await myFetch<string>(`${polymarketBaseUrl}/zh/event/${event.slug}`, {
+      retry: 1,
+      timeout: 5000,
+    })
+    const $ = cheerio.load(html)
+    const title = $("meta[property=\"og:title\"]").attr("content")?.trim()
+    return title?.replace(/\s+(?:交易)?赔率与预测.*?\|\s*Polymarket$/u, "").trim() || event.title
+  } catch {
+    return event.title
+  }
 }
 
 export default defineSource({
   polymarket: async () => {
-    const url = "https://gamma-api.polymarket.com/events?active=true&closed=false&limit=20"
+    const url = "https://gamma-api.polymarket.com/events?active=true&closed=false&limit=20&order=volume24hr&ascending=false"
     const res: PolymarketEvent[] = await myFetch(url)
 
-    return res.map((event) => {
-      // Find the best market in the event (highest volume, active)
-      const activeMarkets = event.markets?.filter(m => m.outcomePrices && m.outcomePrices !== "[\"0\", \"1\"]") || []
-      const mainMarket = activeMarkets.length > 0
-        ? activeMarkets.sort((a, b) => Number(b.volume || 0) - Number(a.volume || 0))[0]
-        : event.markets?.[0]
-
-      let priceText = ""
-      if (mainMarket?.outcomePrices) {
-        try {
-          const prices = JSON.parse(mainMarket.outcomePrices)
-          const yesPrice = Number(prices[0])
-          if (!Number.isNaN(yesPrice)) {
-            const prob = yesPrice * 100
-            if (prob < 1) {
-              priceText = "<1%"
-            } else if (prob > 99) {
-              priceText = ">99%"
-            } else {
-              priceText = `${Math.round(prob)}%`
-            }
-          }
-        } catch {
-          // ignore parse error
-        }
-      }
-
+    return await Promise.all(res.map(async (event) => {
+      const title = await getChineseTitle(event)
       return {
         id: event.id,
-        title: event.title,
-        url: `https://polymarket.com/event/${event.slug}`,
+        title,
+        url: `${polymarketBaseUrl}/zh/event/${event.slug}`,
         extra: {
-          info: priceText,
+          info: `24h 交易 $${formatVolume(event.volume24hr)}`,
+          hover: title === event.title ? undefined : `原文：${event.title}`,
         },
       }
-    })
+    }))
   },
 })

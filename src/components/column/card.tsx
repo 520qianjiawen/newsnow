@@ -106,48 +106,48 @@ function NewsCard({ id, setHandleRef }: NewsCardProps) {
 
   return (
     <>
-      <div className={$("news-card__header flex justify-between mx-2 mt-0 mb-3 items-center")}>
-        <div className="flex gap-2 items-center">
-          <a
-            className={$("news-card__brand w-8 h-8 rounded-full bg-cover")}
-            target="_blank"
-            href={sources[id].home}
+      <div className="news-card__header mx-2 mt-0 mb-3">
+        <a
+          className="news-card__brand rounded-full bg-cover"
+          target="_blank"
+          href={sources[id].home}
+          title={sources[id].desc}
+          style={{
+            backgroundImage: `url(/icons/${id.split("-")[0]}.png)`,
+          }}
+        />
+        <div className="news-card__meta">
+          <span
+            className="news-card__source text-xl font-bold"
             title={sources[id].desc}
-            style={{
-              backgroundImage: `url(/icons/${id.split("-")[0]}.png)`,
-            }}
-          />
-          <span className="flex flex-col">
-            <span className="flex items-center gap-2">
-              <span
-                className="text-xl font-bold"
-                title={sources[id].desc}
-              >
-                {sources[id].name}
-              </span>
-              {sources[id]?.title && <span className="news-card__badge text-sm px-2 py-0.5 rounded-md">{sources[id].title}</span>}
-            </span>
-            <span className="text-xs op-70"><UpdatedTime isError={isError} updatedTime={data?.updatedTime} /></span>
+          >
+            {sources[id].name}
           </span>
+          <div className="news-card__subline">
+            <span className="news-card__updated text-xs op-70"><UpdatedTime isError={isError} updatedTime={data?.updatedTime} /></span>
+          </div>
         </div>
-        <div className="news-card__toolbar flex gap-2 text-lg">
-          <button
-            type="button"
-            className={$("news-card__tool btn i-ph:arrow-counter-clockwise-duotone", isFetching && "animate-spin i-ph:circle-dashed-duotone")}
-            onClick={() => refresh(id)}
-          />
-          <button
-            type="button"
-            className={$("news-card__tool btn", isFocused ? "i-ph:star-fill" : "i-ph:star-duotone")}
-            onClick={toggleFocus}
-          />
-          {/* firefox cannot drag a button */}
-          {setHandleRef && (
-            <div
-              ref={setHandleRef}
-              className={$("news-card__tool btn", "i-ph:dots-six-vertical-duotone", "cursor-grab")}
+        <div className="news-card__actions">
+          {sources[id]?.title && <span className="news-card__badge">{sources[id].title}</span>}
+          <div className="news-card__toolbar flex text-lg">
+            <button
+              type="button"
+              className={$("news-card__tool btn i-ph:arrow-counter-clockwise-duotone", isFetching && "animate-spin i-ph:circle-dashed-duotone")}
+              onClick={() => refresh(id)}
             />
-          )}
+            <button
+              type="button"
+              className={$("news-card__tool btn", isFocused ? "i-ph:star-fill" : "i-ph:star-duotone")}
+              onClick={toggleFocus}
+            />
+            {/* firefox cannot drag a button */}
+            {setHandleRef && (
+              <div
+                ref={setHandleRef}
+                className={$("news-card__tool btn", "i-ph:dots-six-vertical-duotone", "cursor-grab")}
+              />
+            )}
+          </div>
         </div>
       </div>
 

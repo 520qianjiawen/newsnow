@@ -278,6 +278,25 @@
     "interval": 120000,
     "title": "热门股票"
   },
+  "longbridge": {
+    "redirect": "longbridge-us",
+    "name": "Longbridge",
+    "type": "realtime",
+    "column": "finance",
+    "home": "https://longbridge.com/markets",
+    "color": "blue",
+    "interval": 120000,
+    "title": "美股人气榜"
+  },
+  "longbridge-us": {
+    "name": "Longbridge",
+    "type": "realtime",
+    "column": "finance",
+    "home": "https://longbridge.com/markets",
+    "color": "blue",
+    "interval": 120000,
+    "title": "美股人气榜"
+  },
   "gelonghui": {
     "title": "事件",
     "name": "格隆汇",
@@ -550,6 +569,7 @@
     "interval": 600000
   },
   "polymarket": {
+    "title": "热门预测",
     "name": "Polymarket",
     "type": "hottest",
     "column": "coingecko",

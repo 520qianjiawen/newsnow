@@ -59,9 +59,9 @@ const hot = defineSource(async () => {
 })
 
 const telegraph = defineSource(async () => {
-  const apiUrl = `https://www.cls.cn/nodeapi/updateTelegraphList`
+  const apiUrl = `https://www.cls.cn/api/cache`
   const res: TelegraphRes = await myFetch(apiUrl, {
-    query: Object.fromEntries(await getSearchParams()),
+    query: Object.fromEntries(await getSearchParams({ name: "telegraph" })),
   })
   return res.data.roll_data.filter(k => !k.is_ad).map((k) => {
     return {

@@ -2,8 +2,10 @@ import { Link } from "@tanstack/react-router"
 import { useIsFetching } from "@tanstack/react-query"
 import type { SourceID } from "@shared/types"
 import { NavBar } from "../navbar"
-import { Ticker } from "./ticker"
+import { ForexTicker, StockTicker } from "./ticker"
 import { currentSourcesAtom, goToTopAtom } from "~/atoms"
+
+const marketSources = ["finance-indices", "finance-forex"] as const satisfies readonly SourceID[]
 
 function GoTop() {
   const { ok, fn: goToTop } = useAtomValue(goToTopAtom)
@@ -20,19 +22,25 @@ function GoTop() {
 function Refresh() {
   const currentSources = useAtomValue(currentSourcesAtom)
   const { refresh } = useRefetch()
-  const refreshAll = useCallback(() => refresh(...currentSources), [refresh, currentSources])
+  const sourcesToRefresh = useMemo(
+    () => [...new Set<SourceID>([...currentSources, ...marketSources])],
+    [currentSources],
+  )
+  const refreshAll = useCallback(() => refresh(...sourcesToRefresh), [refresh, sourcesToRefresh])
 
   const isFetching = useIsFetching({
     predicate: (query) => {
       const [type, id] = query.queryKey as ["source" | "entire", SourceID]
-      return (type === "source" && currentSources.includes(id)) || type === "entire"
+      return (type === "source" && sourcesToRefresh.includes(id)) || type === "entire"
     },
   })
 
   return (
     <button
       type="button"
-      title="Refresh"
+      title="刷新当前栏目及顶部行情"
+      aria-label="刷新当前栏目及顶部行情"
+      disabled={isFetching > 0}
       className={$("i-ph:arrow-counter-clockwise-duotone btn", isFetching && "animate-spin i-ph:circle-dashed-duotone")}
       onClick={refreshAll}
     />
@@ -42,10 +50,10 @@ function Refresh() {
 export function Header() {
   return (
     <>
-      <span className="flex items-center min-w-0">
-        <Link to="/" className="flex gap-2 items-center flex-shrink-0">
-          <div className="h-10 w-10 bg-cover flex-shrink-0" title="logo" style={{ backgroundImage: "url(/icon.svg)" }} />
-          <span className="text-2xl font-brand line-height-none!">
+      <span className="app-brand">
+        <Link to="/" className="app-brand__link">
+          <div className="app-brand__logo" title="NewsNow" style={{ backgroundImage: "url(/icon.svg)" }} />
+          <span className="app-brand__wordmark">
             <p>News</p>
             <p className="mt--1">
               <span className="color-primary-6">N</span>
@@ -54,18 +62,18 @@ export function Header() {
           </span>
         </Link>
       </span>
-      <span className="justify-self-center min-w-0">
-        <span className="hidden md:(inline-flex items-center) lg:gap-2 xl:gap-3 min-w-0">
-          <div className="flex min-w-0 max-w-[170px] lg:max-w-[250px] xl:max-w-[400px] 2xl:max-w-[600px] overflow-hidden items-center">
-            <Ticker sourceId="finance-indices" />
+      <span className="header-center">
+        <span className="header-market-layout">
+          <div className="header-market-layout__ticker">
+            <StockTicker />
           </div>
           <NavBar />
-          <div className="flex min-w-0 max-w-[170px] lg:max-w-[250px] xl:max-w-[400px] 2xl:max-w-[600px] overflow-hidden items-center">
-            <Ticker sourceId="finance-forex" />
+          <div className="header-market-layout__ticker">
+            <ForexTicker />
           </div>
         </span>
       </span>
-      <span className="justify-self-end flex gap-2 items-center text-xl text-primary-600 dark:text-primary">
+      <span className="header-actions">
         <GoTop />
         <Refresh />
       </span>
