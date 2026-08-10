@@ -9,7 +9,7 @@ const pwaOption: Partial<VitePWAOptions> = {
     name: "NewsNow",
     short_name: "NewsNow",
     description: "Elegant reading of real-time and hottest news",
-    theme_color: "#F14D42",
+    theme_color: "#F8F8FA",
     icons: [
       {
         src: "pwa-192x192.png",
