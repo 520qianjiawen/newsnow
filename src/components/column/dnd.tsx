@@ -14,10 +14,29 @@ import { OverlayScrollbar } from "../common/overlay-scrollbar"
 import type { ItemsProps } from "./card"
 import { CardWrapper } from "./card"
 import { getCardTheme } from "./card-theme"
-// Removed AdSense import as ads are no longer inserted between cards.
+import { AdCard } from "~/components/common/adsense"
 import { currentSourcesAtom } from "~/atoms"
 
+/** Insert one in-feed ad after every N source cards. Sparse enough not to crowd the feed. */
+const AD_INTERVAL = 4
 const AnimationDuration = 200
+
+const itemVariants = {
+  hidden: {
+    y: 20,
+    opacity: 0,
+  },
+  visible: {
+    y: 0,
+    opacity: 1,
+  },
+}
+
+const itemTransition = {
+  type: "tween" as const,
+  duration: AnimationDuration / 1000,
+}
+
 export function Dnd() {
   const [items, setItems] = useAtom(currentSourcesAtom)
   const [parent] = useAutoAnimate({ duration: AnimationDuration })
@@ -50,28 +69,24 @@ export function Dnd() {
             },
           }}
         >
-          {items.map((id, index) => (
-            <motion.li
-              key={id}
-              className={sources[id].cardSpan === 2 ? "md:col-span-2" : undefined}
-              transition={{
-                type: "tween",
-                duration: AnimationDuration / 1000,
-              }}
-              variants={{
-                hidden: {
-                  y: 20,
-                  opacity: 0,
-                },
-                visible: {
-                  y: 0,
-                  opacity: 1,
-                },
-              }}
-            >
-              <SortableCardWrapper id={id} index={index} />
-            </motion.li>
-          ))}
+          {items.flatMap((id, index) => {
+            const nodes = [
+              <motion.li
+                key={id}
+                className={sources[id].cardSpan === 2 ? "md:col-span-2" : undefined}
+                transition={itemTransition}
+                variants={itemVariants}
+              >
+                <SortableCardWrapper id={id} index={index} />
+              </motion.li>,
+            ]
+            if ((index + 1) % AD_INTERVAL === 0) {
+              nodes.push(
+                <InFeedAd key={`ad-${Math.floor(index / AD_INTERVAL)}`} />,
+              )
+            }
+            return nodes
+          })}
         </motion.ol>
       </OverlayScrollbar>
       {isMobile && (
@@ -116,6 +131,20 @@ function DndWrapper({ items, setItems, children }: PropsWithChildren<{
     <DndContext onDropTargetChange={run} autoscroll={el ? { element: el } : undefined}>
       {children}
     </DndContext>
+  )
+}
+
+function InFeedAd() {
+  const [visible, setVisible] = useState(true)
+  if (!visible) return null
+
+  return (
+    <motion.li
+      transition={itemTransition}
+      variants={itemVariants}
+    >
+      <AdCard onUnfilled={() => setVisible(false)} />
+    </motion.li>
   )
 }
 

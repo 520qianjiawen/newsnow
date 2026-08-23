@@ -1,27 +1,27 @@
-import { createFileRoute, redirect } from "@tanstack/react-router"
+import type { FixedColumnID } from "@shared/types"
+import { createFileRoute, notFound, redirect } from "@tanstack/react-router"
+import { isFixedColumnId, normalizeColumnParam } from "@shared/seo"
 import { Column } from "~/components/column"
 
 export const Route = createFileRoute("/c/$column")({
   component: SectionComponent,
   params: {
-    parse: (params) => {
-      const normalizedColumn = params.column.toLowerCase() === "china" ? "news" : params.column.toLowerCase()
-      const column = fixedColumnIds.find(x => x === normalizedColumn)
-      if (!column) throw new Error(`"${params.column}" is not a valid column.`)
-      return {
-        column,
-      }
-    },
+    parse: params => ({
+      column: normalizeColumnParam(params.column),
+    }),
     stringify: params => params,
   },
-  onError: (error) => {
-    if (error?.routerCode === "PARSE_PARAMS") {
-      throw redirect({ to: "/" })
+  beforeLoad: ({ params }) => {
+    if (params.column === "hottest" || params.column === "focus") {
+      throw redirect({ to: "/", replace: true })
+    }
+    if (!isFixedColumnId(params.column)) {
+      throw notFound()
     }
   },
 })
 
 function SectionComponent() {
   const { column } = Route.useParams()
-  return <Column id={column} />
+  return <Column id={column as FixedColumnID} />
 }

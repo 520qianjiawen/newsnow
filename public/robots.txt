@@ -1,2 +1,7 @@
 User-agent: *
 Allow: /
+Disallow: /s
+Disallow: /api
+Disallow: /oauth
+
+Sitemap: https://news.neutemu.com/sitemap.xml

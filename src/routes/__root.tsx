@@ -1,7 +1,8 @@
 import React, { Suspense } from "react"
 import "~/styles/globals.css"
 import "virtual:uno.css"
-import { Outlet, createRootRouteWithContext } from "@tanstack/react-router"
+import { Helmet } from "react-helmet-async"
+import { Link, Outlet, createRootRouteWithContext } from "@tanstack/react-router"
 import { TanStackRouterDevtools } from "@tanstack/router-devtools"
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools"
 import type { QueryClient } from "@tanstack/react-query"
@@ -11,7 +12,6 @@ import { Header } from "~/components/header"
 const Footer = React.lazy(() => import("~/components/footer").then(mod => ({ default: mod.Footer })))
 const Toast = React.lazy(() => import("~/components/common/toast").then(mod => ({ default: mod.Toast })))
 const SearchBar = React.lazy(() => import("~/components/common/search-bar").then(mod => ({ default: mod.SearchBar })))
-// Note: we previously imported AdSense to insert explicit ad slots. Since we now rely on Google Auto Ads to place ads automatically, the AdSense component is unused and thus removed.
 
 export const Route = createRootRouteWithContext<{
   queryClient: QueryClient
@@ -21,10 +21,19 @@ export const Route = createRootRouteWithContext<{
 })
 
 function NotFoundComponent() {
-  const nav = Route.useNavigate()
-  nav({
-    to: "/",
-  })
+  return (
+    <div className="flex flex-col items-center justify-center gap-4 py-24 text-center">
+      <Helmet>
+        <title>页面不存在 | NewsNow</title>
+        <meta name="robots" content="noindex, follow" />
+      </Helmet>
+      <h1 className="text-2xl font-bold">页面不存在</h1>
+      <p className="text-sm op-70">你访问的页面没有找到。</p>
+      <Link to="/" className="color-primary-6 hover:underline">
+        返回首页
+      </Link>
+    </div>
+  )
 }
 
 function RootComponent() {

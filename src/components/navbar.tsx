@@ -12,6 +12,7 @@ export function NavBar() {
           key={columnId}
           to="/c/$column"
           params={{ column: columnId }}
+          data-google-vignette="false"
           className={$(
             "main-navigation__link",
             currentId === columnId && "main-navigation__link--active",

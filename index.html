@@ -7,24 +7,28 @@
   <link rel="alternate" type="application/rss+xml" title="NewsNow RSS Feed" href="/feed.xml" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <!-- SEO Meta Tags -->
-  <meta name="description" content="全球实时热搜新闻排行，汇聚各大平台实时热点，提供快速高效的阅读体验" />
-  <meta name="keywords" content="实时新闻,热门新闻,新闻聚合,全球新闻,新闻阅读,热搜新闻,新闻排行榜,微博热搜,今日头条热搜,抖音热搜,百度热搜" />
+  <title>今日国内外热门新闻与实时热搜 | NewsNow</title>
+  <meta name="description" content="NewsNow 全球实时热搜新闻排行，汇聚各大平台实时热点，提供快速高效的阅读体验。" />
   <meta name="author" content="ASG" />
   <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://news.neutemu.com/" />
   <meta name="baidu-site-verification" content="codeva-je44HjGOGy" />
+  <meta name="google-adsense-account" content="ca-pub-2719674832476577" />
 
   <!-- Open Graph Meta Tags -->
-  <meta property="og:title" content="全球实时热搜新闻排行" />
-  <meta property="og:description" content="NewsNow - 全球实时热搜新闻排行，汇聚各大平台实时热点，提供快速高效的阅读体验" />
+  <meta property="og:site_name" content="NewsNow" />
+  <meta property="og:locale" content="zh_CN" />
+  <meta property="og:title" content="今日国内外热门新闻与实时热搜 | NewsNow" />
+  <meta property="og:description" content="NewsNow 全球实时热搜新闻排行，汇聚各大平台实时热点，提供快速高效的阅读体验。" />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://news.neutemu.com/" />
   <meta property="og:image" content="https://news.neutemu.com/og-image.png" />
 
   <!-- Twitter Card Meta Tags -->
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="全球实时热搜新闻排行" />
-  <meta name="twitter:description" content="全球实时热搜新闻排行，汇聚各大平台实时热点，提供快速高效的阅读体验" />
-  <meta name="twitter:image" content="https://news.neutemu.com/og-image.svg" />
+  <meta name="twitter:title" content="今日国内外热门新闻与实时热搜 | NewsNow" />
+  <meta name="twitter:description" content="NewsNow 全球实时热搜新闻排行，汇聚各大平台实时热点，提供快速高效的阅读体验。" />
+  <meta name="twitter:image" content="https://news.neutemu.com/og-image.png" />
 
   <meta name="theme-color" content="#F8F8FA" />
   <link rel="preload" href="/Baloo2-Bold.subset.ttf" as="font" type="font/ttf" crossorigin>
@@ -36,8 +40,9 @@
       "@context": "https://schema.org",
       "@type": "WebSite",
       "name": "NewsNow",
+      "inLanguage": "zh-CN",
       "url": "https://news.neutemu.com/",
-      "description": "全球实时热搜新闻排行，汇聚各大平台实时热点，提供快速高效的阅读体验"
+      "description": "NewsNow 全球实时热搜新闻排行，汇聚各大平台实时热点，提供快速高效的阅读体验。"
     }
   </script>
 
@@ -50,8 +55,10 @@
     gtag('config', 'G-EL9HHYE5LC');
   </script>
 
-  <!-- Google AdSense -->
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2719674832476577" crossorigin="anonymous"></script>
+  <!-- Google AdSense: load the library only. Do not pass ?client= so Auto Ads
+       (vignette popups / anchor bars) are not initialized. In-feed units still
+       use data-ad-client + data-ad-slot. -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js" crossorigin="anonymous"></script>
 
   <script>
     const query = new URLSearchParams(window.location.search)
@@ -61,11 +68,25 @@
       window.history.replaceState({}, document.title, window.location.pathname)
     }
   </script>
-  <title>全平台实时热搜新闻排行榜</title>
 </head>
 
 <body>
   <div id="app"></div>
+  <noscript>
+    <main>
+      <h1>今日国内外热门新闻与实时热搜</h1>
+      <p>NewsNow 全球实时热搜新闻排行，汇聚各大平台实时热点。</p>
+      <nav>
+        <a href="/">最热</a>
+        <a href="/c/realtime">实时</a>
+        <a href="/c/tech">科技</a>
+        <a href="/c/news">新闻</a>
+        <a href="/c/world">国际</a>
+        <a href="/c/finance">财经</a>
+        <a href="/c/coingecko">加密货币</a>
+      </nav>
+    </main>
+  </noscript>
   <script type="module" src="/src/main.tsx"></script>
 </body>
 

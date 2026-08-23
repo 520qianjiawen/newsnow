@@ -51,7 +51,7 @@ export function Header() {
   return (
     <>
       <span className="app-brand">
-        <Link to="/" className="app-brand__link">
+        <Link to="/" className="app-brand__link" data-google-vignette="false">
           <div className="app-brand__logo" title="NewsNow" style={{ backgroundImage: "url(/icon.svg)" }} />
           <span className="app-brand__wordmark">
             <p>News</p>

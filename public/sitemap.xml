@@ -2,8 +2,37 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://news.neutemu.com/</loc>
-    <lastmod>2025-01-18</lastmod>
-    <changefreq>always</changefreq>
+    <changefreq>hourly</changefreq>
     <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://news.neutemu.com/c/realtime</loc>
+    <changefreq>hourly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://news.neutemu.com/c/tech</loc>
+    <changefreq>hourly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://news.neutemu.com/c/news</loc>
+    <changefreq>hourly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://news.neutemu.com/c/world</loc>
+    <changefreq>hourly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://news.neutemu.com/c/finance</loc>
+    <changefreq>hourly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://news.neutemu.com/c/coingecko</loc>
+    <changefreq>hourly</changefreq>
+    <priority>0.8</priority>
   </url>
 </urlset>

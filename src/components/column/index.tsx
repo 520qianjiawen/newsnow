@@ -1,5 +1,6 @@
 import type { FixedColumnID } from "@shared/types"
 import { Helmet } from "react-helmet-async"
+import { OG_IMAGE, SITE_NAME, getColumnSeo } from "@shared/seo"
 import { ForexTicker, StockTicker } from "../header/ticker"
 import { NavBar } from "../navbar"
 import { Dnd } from "./dnd"
@@ -11,18 +12,7 @@ export function Column({ id }: { id: FixedColumnID }) {
     setCurrentColumnID(id)
   }, [id, setCurrentColumnID])
 
-  const isHottest = id === "hottest"
-  const pageTitle = isHottest
-    ? "今日国内外热门新闻与实时热搜 | NewsNow"
-    : `${metadata[id].name}实时热搜排行 | NewsNow`
-
-  const pageDescription = isHottest
-    ? "NewsNow 全球实时热搜新闻排行，汇聚各大平台实时热点，提供快速高效的阅读体验。"
-    : `为您精选最新的${metadata[id].name}热点新闻、实时热搜与行业动态，快速掌握${metadata[id].name}资讯。`
-
-  const canonicalUrl = (id === "hottest" || id === "focus")
-    ? "https://news.neutemu.com/"
-    : `https://news.neutemu.com/c/${id}`
+  const { title: pageTitle, description: pageDescription, canonical: canonicalUrl } = getColumnSeo(id)
 
   return (
     <>
@@ -30,11 +20,17 @@ export function Column({ id }: { id: FixedColumnID }) {
         <title>{pageTitle}</title>
         <meta name="description" content={pageDescription} />
         <link rel="canonical" href={canonicalUrl} />
+        <meta property="og:site_name" content={SITE_NAME} />
+        <meta property="og:locale" content="zh_CN" />
+        <meta property="og:type" content="website" />
         <meta property="og:url" content={canonicalUrl} />
         <meta property="og:title" content={pageTitle} />
         <meta property="og:description" content={pageDescription} />
+        <meta property="og:image" content={OG_IMAGE} />
+        <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={pageTitle} />
         <meta name="twitter:description" content={pageDescription} />
+        <meta name="twitter:image" content={OG_IMAGE} />
       </Helmet>
 
       {/* 这是一个为 SEO 准备的视觉隐藏的 H1 标签 */}
