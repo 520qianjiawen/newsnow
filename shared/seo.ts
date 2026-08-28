@@ -6,8 +6,6 @@ export const SITE_NAME = "NewsNow"
 export const DEFAULT_TITLE = "今日国内外热门新闻与实时热搜 | NewsNow"
 export const DEFAULT_DESCRIPTION = "NewsNow 全球实时热搜新闻排行，汇聚各大平台实时热点，提供快速高效的阅读体验。"
 export const OG_IMAGE = `${SITE_ORIGIN}/og-image.png`
-export const ADSENSE_PUBLISHER = "pub-2719674832476577"
-export const ADSENSE_CERTIFICATION = "f08c97fa2da1d47"
 
 /** Column pages that should appear in the sitemap. Home covers hottest/focus. */
 export const sitemapColumnIds = ["realtime", "tech", "news", "world", "finance", "coingecko"] as const satisfies readonly FixedColumnID[]

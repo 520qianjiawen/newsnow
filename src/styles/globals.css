@@ -661,23 +661,6 @@ button:disabled {
   border-color: rgba(var(--card-accent), 0.28);
 }
 
-.news-card--ad {
-  contain: none;
-  will-change: auto;
-  background-image: none;
-}
-
-.news-card--ad .news-card__header {
-  min-height: auto;
-  padding: 0.5rem 0.75rem;
-}
-
-.news-card--ad .adsbygoogle {
-  width: 100%;
-  min-height: 250px;
-  height: 100%;
-}
-
 /* Dark mode cards (optional theme) */
 .dark .news-card {
   border-color: rgba(var(--card-accent), 0.15);
