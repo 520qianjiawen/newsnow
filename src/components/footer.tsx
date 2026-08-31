@@ -15,8 +15,8 @@ export function Footer() {
         By
         {" "}
       </span>
-      <a href="https://github.com/ASG/newsnow" target="_blank" className="hover:underline">
-        ASG
+      <a href="https://www.neutemu.com/" target="_blank" className="hover:underline">
+        Neutemu
       </a>
     </span>
   )
