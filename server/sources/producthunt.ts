@@ -1,12 +1,14 @@
 import process from "node:process"
 import type { NewsItem } from "@shared/types"
 
-export default defineSource(async () => {
-  const apiToken = process.env.PRODUCTHUNT_API_TOKEN
-  const token = `Bearer ${apiToken}`
-  if (!apiToken) {
-    throw new Error("PRODUCTHUNT_API_TOKEN is not set")
-  }
+const FEED_URL = "https://www.producthunt.com/feed"
+
+function stripHtml(html?: string) {
+  if (!html) return ""
+  return html.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim()
+}
+
+async function fetchFromApi(apiToken: string) {
   const query = `
     query {
       posts(first: 30, order: VOTES) {
@@ -27,7 +29,7 @@ export default defineSource(async () => {
   const response: any = await myFetch("https://api.producthunt.com/v2/api/graphql", {
     method: "POST",
     headers: {
-      "Authorization": token,
+      "Authorization": `Bearer ${apiToken}`,
       "Content-Type": "application/json",
       "Accept": "application/json",
     },
@@ -53,4 +55,35 @@ export default defineSource(async () => {
   }
 
   return news
+}
+
+async function fetchFromFeed() {
+  const data = await rss2json(FEED_URL)
+  if (!data?.items.length) throw new Error("Cannot fetch producthunt feed")
+  return data.items.flatMap((item) => {
+    const url = typeof item.link === "string" ? item.link : ""
+    const title = item.title?.trim()
+    if (!url || !title) return []
+    const hover = stripHtml(item.description)
+    return [{
+      id: url,
+      title,
+      url,
+      pubDate: item.created,
+      extra: hover ? { hover } : undefined,
+    } satisfies NewsItem]
+  })
+}
+
+export default defineSource(async () => {
+  const apiToken = process.env.PRODUCTHUNT_API_TOKEN
+  if (apiToken) {
+    try {
+      const news = await fetchFromApi(apiToken)
+      if (news.length) return news
+    } catch {
+      // token missing permissions or API error — use public feed
+    }
+  }
+  return fetchFromFeed()
 })
