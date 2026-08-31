@@ -40,6 +40,7 @@ export async function rss2json(url: string): Promise<RSSInfo | undefined> {
       description: val.summary && val.summary.$text ? val.summary.$text : val.description,
       link: val.link && val.link.href ? val.link.href : val.link,
       author: val.author && val.author.name ? val.author.name : val["dc:creator"],
+      source: val.source && val.source.$text ? val.source.$text : (typeof val.source === "string" ? val.source : ""),
       created: val.updated ?? val.pubDate ?? val.created,
       category: val.category || [],
       content: val.content && val.content.$text ? val.content.$text : val["content:encoded"],

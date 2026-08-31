@@ -13,6 +13,7 @@ export interface RSSItem {
   description: string
   link: string
   created?: string
+  source?: string
 }
 
 export interface CacheInfo {
