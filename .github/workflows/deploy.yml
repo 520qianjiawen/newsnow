@@ -1,0 +1,71 @@
+name: Deploy production
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: Build and deploy to VPS
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build
+        env:
+          SKIP_FAVICON_DOWNLOAD: 'true'
+        run: pnpm build
+
+      - name: Package release
+        run: |
+          test -f dist/output/server/index.mjs
+          printf '%s\n' "${GITHUB_SHA}" > dist/output/REVISION
+          tar -C dist/output -czf newsnow-release.tar.gz .
+
+      - name: Deploy to VPS
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.NEWSNOW_SSH_KEY }}
+          HOST: ${{ secrets.NEWSNOW_HOST }}
+          USER: ${{ secrets.NEWSNOW_USER }}
+          DEPLOY_SHA: ${{ github.sha }}
+        run: |
+          mkdir -p ~/.ssh
+          printf '%s\n' "$SSH_PRIVATE_KEY" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          printf '%s %s\n' "$HOST" "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJJ+IVteCP5URrwnxVBReiIGrLxWs6BpQmka+2zlg/CG" >> ~/.ssh/known_hosts
+          SSH="ssh -i $HOME/.ssh/id_ed25519 -o IdentitiesOnly=yes -o BatchMode=yes"
+          rsync -e "$SSH" deploy/release.sh "$USER@$HOST:/home/ubuntu/apps/newsnow/deploy-release.sh"
+          $SSH "$USER@$HOST" "chmod +x /home/ubuntu/apps/newsnow/deploy-release.sh"
+          $SSH "$USER@$HOST" "DEPLOY_SHA='$DEPLOY_SHA' /home/ubuntu/apps/newsnow/deploy-release.sh" < newsnow-release.tar.gz
+
+      - name: Verify public site
+        run: |
+          for i in $(seq 1 10); do
+            if curl -fsSI --max-time 10 https://news.neutemu.com/ | grep -qi "HTTP/"; then
+              curl -fsSI --max-time 10 https://news.neutemu.com/
+              exit 0
+            fi
+            sleep 2
+          done
+          echo "public health check failed" >&2
+          exit 1
