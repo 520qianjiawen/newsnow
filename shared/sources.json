@@ -375,6 +375,16 @@
     "interval": 600000,
     "title": "Today"
   },
+  "x": {
+    "title": "实时趋势",
+    "name": "X",
+    "type": "hottest",
+    "desc": "来自第三方网站: trends24.in（few minutes ago）",
+    "column": "tech",
+    "home": "https://x.com/explore",
+    "color": "gray",
+    "interval": 300000
+  },
   "bilibili": {
     "redirect": "bilibili-hot-search",
     "name": "哔哩哔哩",

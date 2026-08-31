@@ -296,6 +296,16 @@ export const originSources = {
       },
     },
   },
+  "x": {
+    name: "X",
+    title: "实时趋势",
+    type: "hottest",
+    column: "tech",
+    color: "gray",
+    interval: Time.Fast,
+    desc: "来自第三方网站: trends24.in（few minutes ago）",
+    home: "https://x.com/explore",
+  },
   "bilibili": {
     name: "哔哩哔哩",
     color: "blue",

@@ -44,6 +44,8 @@ const techFirstId: SourceID = "36kr-quick"
 const techLastIds: SourceID[] = ["producthunt"]
 const techAnchorId: SourceID = "ithome"
 const techAfterAnchorIds: SourceID[] = ["sspai", "juejin"]
+const techGithubId: SourceID = "github-trending-today"
+const techAfterGithubIds: SourceID[] = ["x"]
 const techExcludedIds: SourceID[] = ["36kr-renqi"]
 const hottestExcludedIds: SourceID[] = ["producthunt", "hackernews", "steam", "freebuf"]
 const realtimeExcludedIds: SourceID[] = ["pcbeta-windows11"]
@@ -79,6 +81,7 @@ const hottestPreferredIds: SourceID[] = [
   "qqvideo-tv-hotsearch",
   "iqiyi-hot-ranklist",
   "github-trending-today",
+  "x",
 ]
 
 function withFinancePreferredOrder(items: SourceID[]) {
@@ -137,6 +140,20 @@ function withTechPreferredOrder(items: SourceID[]) {
       ]
     } else {
       middle = [...middle, ...moveAfterAnchor]
+    }
+  }
+  const moveAfterGithub = techAfterGithubIds.filter(id => middle.includes(id))
+  middle = middle.filter(id => !moveAfterGithub.includes(id))
+  if (moveAfterGithub.length) {
+    const githubIndex = middle.indexOf(techGithubId)
+    if (githubIndex >= 0) {
+      middle = [
+        ...middle.slice(0, githubIndex + 1),
+        ...moveAfterGithub,
+        ...middle.slice(githubIndex + 1),
+      ]
+    } else {
+      middle = [...middle, ...moveAfterGithub]
     }
   }
   return [...first, ...middle, ...last]
