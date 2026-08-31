@@ -150,6 +150,15 @@ export const originSources = {
     type: "realtime",
     home: "https://www.ithome.com",
   },
+  "mydrivers": {
+    name: "快科技",
+    title: "最新资讯",
+    color: "orange",
+    column: "tech",
+    type: "realtime",
+    interval: Time.Fast,
+    home: "https://www.mydrivers.com/",
+  },
   "thepaper": {
     name: "澎湃新闻",
     interval: Time.Common,

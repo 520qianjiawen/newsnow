@@ -181,6 +181,15 @@
     "color": "red",
     "interval": 600000
   },
+  "mydrivers": {
+    "title": "最新资讯",
+    "name": "快科技",
+    "type": "realtime",
+    "column": "tech",
+    "home": "https://www.mydrivers.com/",
+    "color": "orange",
+    "interval": 300000
+  },
   "thepaper": {
     "title": "热榜",
     "name": "澎湃新闻",
