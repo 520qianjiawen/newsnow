@@ -67,7 +67,8 @@ const hottestPreferredIds: SourceID[] = [
   "baidu",
   "thepaper",
   "hupu",
-  "douban",
+  "douban-movie",
+  "douban-tv",
   "tieba",
   "cls-hot",
   "nowcoder",
@@ -80,6 +81,8 @@ const hottestPreferredIds: SourceID[] = [
   "bilibili-ranking",
   "qqvideo-tv-hotsearch",
   "iqiyi-hot-ranklist",
+  "mgtv-tv",
+  "mgtv-variety",
   "github-trending-today",
   "x",
 ]

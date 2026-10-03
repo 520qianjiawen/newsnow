@@ -526,13 +526,29 @@
     "title": "最热"
   },
   "douban": {
-    "title": "热门电影",
+    "redirect": "douban-movie",
     "name": "豆瓣",
     "type": "hottest",
     "column": "china",
-    "home": "https://www.douban.com",
+    "home": "https://movie.douban.com",
     "color": "green",
-    "interval": 600000
+    "title": "热门电影"
+  },
+  "douban-movie": {
+    "name": "豆瓣",
+    "type": "hottest",
+    "column": "china",
+    "home": "https://movie.douban.com",
+    "color": "green",
+    "title": "热门电影"
+  },
+  "douban-tv": {
+    "name": "豆瓣",
+    "type": "hottest",
+    "column": "china",
+    "home": "https://movie.douban.com/tv",
+    "color": "green",
+    "title": "热门剧集"
   },
   "steam": {
     "title": "在线人数",
@@ -682,6 +698,34 @@
     "color": "green",
     "interval": 1800000,
     "title": "热播榜"
+  },
+  "mgtv": {
+    "redirect": "mgtv-tv",
+    "name": "芒果TV",
+    "type": "hottest",
+    "column": "china",
+    "home": "https://www.mgtv.com/tv/",
+    "color": "orange",
+    "interval": 1800000,
+    "title": "热播剧集"
+  },
+  "mgtv-tv": {
+    "name": "芒果TV",
+    "type": "hottest",
+    "column": "china",
+    "home": "https://www.mgtv.com/tv/",
+    "color": "orange",
+    "interval": 1800000,
+    "title": "热播剧集"
+  },
+  "mgtv-variety": {
+    "name": "芒果TV",
+    "type": "hottest",
+    "column": "china",
+    "home": "https://www.mgtv.com/show/",
+    "color": "orange",
+    "interval": 1800000,
+    "title": "王牌综艺"
   },
   "finance": {
     "redirect": "finance-indices",

@@ -456,10 +456,22 @@ export const originSources = {
   "douban": {
     name: "豆瓣",
     column: "china",
-    title: "热门电影",
     color: "green",
-    type: "hottest",
     home: "https://www.douban.com",
+    sub: {
+      movie: {
+        title: "热门电影",
+        type: "hottest",
+        interval: Time.Day,
+        home: "https://movie.douban.com",
+      },
+      tv: {
+        title: "热门剧集",
+        type: "hottest",
+        interval: Time.Day,
+        home: "https://movie.douban.com/tv",
+      },
+    },
   },
   "steam": {
     name: "Steam",
@@ -581,6 +593,26 @@ export const originSources = {
         type: "hottest",
         interval: Time.Common,
         home: "https://www.iqiyi.com",
+      },
+    },
+  },
+  "mgtv": {
+    name: "芒果TV",
+    column: "china",
+    color: "orange",
+    home: "https://www.mgtv.com/",
+    sub: {
+      tv: {
+        title: "热播剧集",
+        type: "hottest",
+        interval: Time.Common,
+        home: "https://www.mgtv.com/tv/",
+      },
+      variety: {
+        title: "王牌综艺",
+        type: "hottest",
+        interval: Time.Common,
+        home: "https://www.mgtv.com/show/",
       },
     },
   },
