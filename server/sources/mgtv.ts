@@ -61,5 +61,5 @@ async function fetchMgtvModule(vclassId: string, moduleTitle: string) {
 
 export default defineSource({
   "mgtv-tv": async () => fetchMgtvModule("187", "热播剧集"),
-  "mgtv-variety": async () => fetchMgtvModule("186", "王牌节目"),
+  "mgtv": async () => fetchMgtvModule("187", "热播剧集"),
 })

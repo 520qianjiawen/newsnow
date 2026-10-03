@@ -718,15 +718,6 @@
     "interval": 1800000,
     "title": "热播剧集"
   },
-  "mgtv-variety": {
-    "name": "芒果TV",
-    "type": "hottest",
-    "column": "china",
-    "home": "https://www.mgtv.com/show/",
-    "color": "orange",
-    "interval": 1800000,
-    "title": "王牌综艺"
-  },
   "finance": {
     "redirect": "finance-indices",
     "name": "全球市场",

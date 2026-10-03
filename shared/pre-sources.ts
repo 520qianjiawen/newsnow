@@ -608,12 +608,6 @@ export const originSources = {
         interval: Time.Common,
         home: "https://www.mgtv.com/tv/",
       },
-      variety: {
-        title: "王牌综艺",
-        type: "hottest",
-        interval: Time.Common,
-        home: "https://www.mgtv.com/show/",
-      },
     },
   },
   "finance": {

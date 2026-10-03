@@ -80,7 +80,6 @@ const hottestPreferredIds: SourceID[] = [
   "qqvideo-tv-hotsearch",
   "iqiyi-hot-ranklist",
   "mgtv-tv",
-  "mgtv-variety",
   "github-trending-today",
   "x",
 ]
