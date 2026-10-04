@@ -39,7 +39,15 @@ export function Dnd() {
   const [parent] = useAutoAnimate({ duration: AnimationDuration })
   useEntireQuery(items)
 
-  if (!items.length) return null
+  if (!items.length) {
+    return (
+      <div className="flex flex-col items-center justify-center py-24 text-center op-60">
+        <span className="i-ph:star-duotone text-5xl mb-3 text-primary op-40" />
+        <p className="text-base font-medium mb-1">暂无关注的内容</p>
+        <p className="text-xs op-70">点击任意卡片右上角的星号即可加入关注</p>
+      </div>
+    )
+  }
 
   return (
     <DndWrapper items={items} setItems={setItems}>

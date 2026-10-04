@@ -1,5 +1,5 @@
 import type { FixedColumnID } from "@shared/types"
-import { createFileRoute, notFound, redirect } from "@tanstack/react-router"
+import { createFileRoute, notFound } from "@tanstack/react-router"
 import { isFixedColumnId, normalizeColumnParam } from "@shared/seo"
 import { Column } from "~/components/column"
 
@@ -12,9 +12,6 @@ export const Route = createFileRoute("/c/$column")({
     stringify: params => params,
   },
   beforeLoad: ({ params }) => {
-    if (params.column === "hottest" || params.column === "focus") {
-      throw redirect({ to: "/", replace: true })
-    }
     if (!isFixedColumnId(params.column)) {
       throw notFound()
     }

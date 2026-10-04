@@ -14,9 +14,6 @@ export default defineEventHandler(async (event) => {
   const url = getRequestURL(event)
   const pathname = url.pathname.replace(/\/+$/, "") || "/"
 
-  if (pathname === "/c/hottest" || pathname === "/c/focus") {
-    return sendRedirect(event, "/", 301)
-  }
   if (pathname === "/c/china") {
     return sendRedirect(event, "/c/news", 301)
   }
@@ -35,6 +32,9 @@ export default defineEventHandler(async (event) => {
     }
 
     if (!crawler) return
+    if (columnId === "focus" || columnId === "hottest") {
+      return sendRedirect(event, "/", 301)
+    }
     setResponseHeader(event, "content-type", "text/html; charset=utf-8")
     setResponseHeader(event, "cache-control", "public, max-age=300")
     return await buildColumnHtml(columnId)
